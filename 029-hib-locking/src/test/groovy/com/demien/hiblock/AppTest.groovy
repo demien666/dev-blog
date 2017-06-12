@@ -1,6 +1,7 @@
 package com.demien.hiblock
 
 import com.demien.hiblock.db.HibernateUtil
+import com.demien.hiblock.dto.Group
 import com.demien.hiblock.dto.User
 import org.hibernate.LockMode
 import org.hibernate.LockOptions
@@ -24,6 +25,7 @@ class AppTest extends Specification {
     def setup() {
         doInTransaction({
             session.createQuery("delete from User").executeUpdate()
+            session.createQuery("delete from Group").executeUpdate()
         })
     }
 
@@ -57,16 +59,6 @@ class AppTest extends Specification {
         session = oldSession
     }
 
-    def updateUser(id, name) {
-        def session = HibernateUtil.getSession()
-        def tx = session.getTransaction()
-        tx.begin()
-        def user = session.get(User, id)
-        user.setUserName(name)
-        session.update(user)
-        tx.commit()
-    }
-
     def "it shoud create User entity"() {
         given:
         createEntity(new User(1l, "Huan Sebastyan"))
@@ -93,6 +85,24 @@ class AppTest extends Specification {
 
         then:
         thrown OptimisticLockException
+
+    }
+
+    def "it should fail if the same fields were changed"() {
+        given:
+        createEntity(new Group(1L, "SYSDBA", "Database Administrators"))
+        Group loadedGroup1 = session.get(Group.class, 1L)
+        Group loadedGroup2 = session.get(Group.class, 1L)
+        loadedGroup1.setGroupName("Updated1")
+        loadedGroup2.setGroupName("Updated2")
+
+        when:
+        updateEntityInAnotherSession(loadedGroup1)
+        updateEntity(loadedGroup2)
+
+        then:
+        thrown OptimisticLockException
+
 
     }
 

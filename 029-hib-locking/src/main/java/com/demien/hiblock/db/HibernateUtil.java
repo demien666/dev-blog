@@ -14,6 +14,7 @@ public class HibernateUtil {
     static {
         final Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(com.demien.hiblock.dto.User.class);
+        configuration.addAnnotatedClass(com.demien.hiblock.dto.Group.class);
 
         configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
         configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/test");

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/task
+                           http://www.springframework.org/schema/task/spring-task.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/integration
+                           http://www.springframework.org/schema/integration/spring-integration.xsd"
+        >
+
+    <bean id="auditInterceptor" class="com.demien.spring.integration.interceptor.LogInterceptor"/>
+
+    <int:channel id = "newPaymentChannel">
+        <int:interceptors>
+            <ref bean="auditInterceptor"/>
+        </int:interceptors>
+    </int:channel>
+
+    <int:gateway id="inPaymentGateway"
+                 service-interface="com.demien.spring.integration.gateways.LoadPaymentsGateway">
+        <int:method name="loadPayments" request-channel="newPaymentChannel" />
+    </int:gateway>
+
+    <int:splitter
+            input-channel="newPaymentChannel"
+            output-channel="singlePaymentChannel" />
+    <int:channel id = "singlePaymentChannel">
+        <int:interceptors>
+            <ref bean="auditInterceptor"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:filter
+            input-channel="singlePaymentChannel"
+            output-channel="filteredPaymentChannel"
+            ref="paymentFilter" />
+    <int:channel id = "filteredPaymentChannel">
+        <int:interceptors>
+            <ref bean="auditInterceptor"/>
+        </int:interceptors>
+    </int:channel>
+    <bean id="paymentFilter" class="com.demien.spring.integration.filters.PaymentFilter"/>
+
+    <int:recipient-list-router input-channel="filteredPaymentChannel">
+        <int:recipient channel = "regularPayments" selector-expression="!payload.isVip()"/>
+        <int:recipient channel = "vipPayments" selector-expression="payload.isVip()" />
+    </int:recipient-list-router>
+    <int:channel id = "regularPayments">
+        <int:interceptors>
+            <ref bean="auditInterceptor"/>
+        </int:interceptors>
+    </int:channel>
+    <int:channel id = "vipPayments">
+        <int:interceptors>
+            <ref bean="auditInterceptor"/>
+        </int:interceptors>
+    </int:channel>
+    <int:transformer
+            input-channel="regularPayments"
+            output-channel="processingChannel"
+            ref="regularPaymentTransformer" />
+    <int:transformer
+            input-channel="vipPayments"
+            output-channel="processingChannel"
+            ref="vipPaymentTransformer" />
+    <int:channel id = "processingChannel">
+        <int:queue capacity="10" />
+        <int:interceptors>
+            <ref bean="auditInterceptor"/>
+        </int:interceptors>
+    </int:channel>
+    <bean id="regularPaymentTransformer" class="com.demien.spring.integration.transformers.RegularPaymentTransformer"/>
+    <bean id="vipPaymentTransformer" class="com.demien.spring.integration.transformers.VipPaymentTransformer"/>
+
+
+    <int:service-activator input-channel="processingChannel" ref="paymentProcessor">
+        <int:poller fixed-rate="100" error-channel="failedPaymentsChannel" />
+    </int:service-activator>
+    <bean id="paymentProcessor" class="com.demien.spring.integration.activators.PaymentServiceActivator"/>
+
+    <int:channel id = "failedPaymentsChannel">
+        <int:interceptors>
+            <ref bean="auditInterceptor"/>
+        </int:interceptors>
+    </int:channel>
+
+
+    <int:service-activator input-channel="failedPaymentsChannel" ref="failProcessor" />
+    <bean id="failProcessor" class="com.demien.spring.integration.activators.FailedPaymentActivator"/>
+
+</beans>

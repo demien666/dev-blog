@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Table view</title>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script lang="text/javascript" src="js/common.js"> </script>
+<script lang="text/javascript" src="js/testData.js"> </script>
+
+<script lang="text/javascript">
+	var currentEntityType = ENTITY_REGION;
+	var currentAction= "UNKNOWN";
+    var viewMode=VIEW_MODE_VIEW;
+	var selectedEntity=new Object();
+	var tableData=new Object();
+
+	function onLoad() {
+		createTestData();
+		//this.currentEntityType = window.opener.currentEntity;
+		//this.viewMode = window.opener.viewMode;
+		//var div = document.getElementById("info");
+		//div.innerHTML="loaded!";
+		//div.innerHTML = "current entity=" + this.currentEntity;
+		createControls();
+		refresh();
+	}
+	
+	function createControls() {
+		var divButtons = document.getElementById("buttons");
+		var text="";
+		if (viewMode==VIEW_MODE_VIEW) {			
+			text=text+"<button onClick='addEntity()'>Add Entity</button>";
+			text=text+"<button onClick='updateEntity()'>Update Entity</button>";
+			text=text+"<button onClick='deleteEntity()'>Delete Entity</button>";
+		} 
+		if (viewMode==VIEW_MODE_SELECT) {
+			text=text+"<button onClick='selectEntity()'>Select</button>";
+		} 
+		divButtons.innerHTML=text;	
+	}
+
+	function refresh() {
+		//var URL = window.URL_MAP[currentEntity.toString];
+		var URL = getServiceUrlByEntityName(currentEntityType.toString())+SERVICE_ENTITY_LIST;
+		//var URL = getServiceUrlByEntityName(currentEntityType.toString())+"entityList";
+		var div = document.getElementById("debug");
+		div.innerHTML=URL;
+		
+		$.ajax({
+					type : "GET",
+					url : URL,
+					cache : false,
+					error : processErrorResult,
+					dataType : 'json',
+					success : refreshDataSuccess
+				});
+	}
+
+	function refreshDataSuccess(data) {
+		//alert("Success!!!"+data.toString());
+		rebuildTable(data);
+		tableData=data;
+	}
+	
+	function rebuildTable(data) {
+		if (data.length==0) {
+			return;
+		}
+		var tableDiv=document.getElementById("table");
+		var text="";
+		var fieldList=getFieldListByEntityName(currentEntityType.toString());
+		
+		text=text+"<table border='1'>";
+		// process header
+		text=text+"<tr>";
+		for (var i=0; i<fieldList.length; i++) {
+			text=text+"<th>"+fieldList[i].fieldName+"</th>";
+		}
+		text=text+"<th>*</th> </tr>";
+		
+		// process rows 
+		for (var i=0; i<data.length; i++) {
+			var entity=data[i];
+			text=text+"<tr>"
+			var rowId=-1;
+			for (var j=0; j<fieldList.length; j++) {
+				var fieldName=fieldList[j].fieldName;
+				var value="";
+				try {
+				      value=entity[fieldName.toString()];
+				} catch (err) {
+					value=err.toString();
+				}
+				text=text+"<td>"+value+"</td>";
+				if (fieldName=="id") {
+					rowId=value;
+				}
+			}
+			text=text+"<td><input type='radio' name='rowSelector' value='"+rowId.toString()+"'/> </td>  </tr>"
+		}
+		
+		text=text+"</table>";
+		tableDiv.innerHTML=text;
+	}
+
+	function processErrorResult(xhr, statusText) {
+		alert("Error: " + statusText + " xhr:" + xhr);
+	}
+	
+	function addEntity() {
+		currentAction=ACTION_ADD;
+		showEditView();
+	}
+	
+	function updateEntity() {
+		currentAction=ACTION_UPDATE;
+		setSelectedEntity();
+		showEditView();
+	}
+	
+	function deleteEntity() {
+		currentAction=ACTION_DELETE;
+		setSelectedEntity();
+		showEditView();
+	}	
+	
+	function selectEntity() {
+		//here should be return of values to opener form
+	}
+	
+	function setSelectedEntity() {
+		var entityId = document.querySelector('input[name = "rowSelector"]:checked').value;
+		//loop to get element by id
+		for (var i=0; i<tableData.length; i++) {
+			var entity=tableData[i];
+			if (entity.id==entityId) {
+				this.selectedEntity=entity;
+			}
+		}
+	}
+	
+	function showEditView() {
+		window.open("editView.html", "hello", "width=640, height=480");
+	}
+	
+</script>
+
+</head>
+<body onload="onLoad()">
+     <button onClick="refresh()">Refresh</button>
+      
+     <br/>
+	<div id="info"></div>
+	<div id="debug"></div>
+	<div id="buttons"></div>
+	<div id="table"></div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop
+	                       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+
+        >
+
+    <bean id="dao" class="com.demien.aoplogging.TestDao"/>
+    <bean id="service" class="com.demien.aoplogging.TestService">
+        <property name="dao">
+            <ref bean="dao"/>
+        </property>
+    </bean>
+
+    <bean id="controller" class="com.demien.aoplogging.TestUIController">
+        <property name="service">
+            <ref bean="service"/>
+        </property>
+    </bean>
+
+    <!-- The Aspect itself. -->
+    <aop:aspectj-autoproxy />
+    <bean id="aopInterceptor" class="com.demien.aoplogging.AopInterceptor">
+
+        <constructor-arg>
+            <map>
+                <entry key="TIME_FORMAT"  value="sec"></entry>
+            </map>
+        </constructor-arg>
+
+    </bean>
+
+
+</beans>

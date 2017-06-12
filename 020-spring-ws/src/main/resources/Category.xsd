@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns="http://com/demien/springws/domain" targetNamespace="http://com/demien/springws/domain" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Category" type="Category"/>
+	<xs:complexType name="Category">
+		<xs:sequence>
+			<xs:element name="CategoryId" type="xs:integer"/>
+			<xs:element name="CategoryName" type="xs:string"/>
+			<xs:element name="CategoryDescription" type="xs:string"/>
+			<xs:element name="CategoryParentId" type="xs:integer"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

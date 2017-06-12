@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<title>Spring cxf RESTful Web services</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script lang="text/javascript">
+   var BASE_URL="http://localhost:8080/spring-cxf-rest/services/rest/";
+   var REGION_SERVICE_URL=BASE_URL+"regionService/";
+   var regionFieldList=["id", "name"];
+   var fieldMap=new Object();
+   var currentEntityType="UNKNOWN";
+   var urlMap=new Object();
+   fieldMap["region"]=regionFieldList;
+   urlMap["region"]=BASE_URL+"regionService/";
+
+       function sayHello() {
+          var div=document.getElementById("content");
+          div.innerHTML="Hello world!";
+       }
+       
+       function loadData() {
+    	   /*
+    	   $.get({
+    		   url:"http://localhost:8080/spring-cxf-rest/services/rest/regionService/sayhello",
+    		   success: loadDataSuccess
+    	   });
+    	   */
+    	   $.ajax({
+    		   type: "GET",
+    		   //url: "http://localhost:8080/spring-cxf-rest/services/rest/regionService/sayhello",	
+    		   url: REGION_SERVICE_URL+"sayhello",
+    		   cache: false,
+    		   error: processErrorResult,
+    		   //error: function(xhr, statusText) {  alert("Error: "+statusText);     },
+    		   dataType: 'text',
+    		   success: loadDataSuccess
+    		   //success: function(msg){   alert( "Success: " + msg );   }
+    		 });
+       }
+       
+       function processErrorResult(xhr, statusText) {
+    	   alert("Error: "+statusText+" xhr:"+xhr);
+       }
+       
+       function loadDataSuccess(data) {
+           var div=document.getElementById("content");
+           div.innerHTML=data;   	   
+       }
+       
+       function addEntityForm(entityName) {
+    	   var text="";
+    	   var fieldList=fieldMap[entityName];
+    	   var div=document.getElementById("addEntity");
+    	   currentEntityType=entityName;
+    	   // add field list
+    	   for (var i=0; i<fieldList.length;i++) {
+    		   text=text+fieldList[i]+":<input type='text' id='"+  fieldList[i]+"'><br/>";
+    	   }
+    	   // add action button
+    	   text=text+"<button name='action' onClick='addEntityRequest()'>Sent add entity request </button> ";
+    	   div.innerHTML=text;
+    	   //var but = document.createElement("button");
+    	   //var t=document.createTextNode("Sent add entity request");
+    	   //but.appendChild(t);
+    	   //but.onclick = addEntityRequest(entityName);
+    	   //div.appendChild(but);
+    	   
+       }
+       
+       function addEntityRequest(entityName) {
+    	   var div=document.getElementById("addEntityRequest");
+    	   //div.innerHTML="addEntityRequest. Current entity="+currentEntity;
+    	   //div.innerHTML="addEntityRequest. Current entity="+entityName;
+    	   var text="addEntityRequest. Current entity="+currentEntity;
+    	   var fieldList=fieldMap[currentEntity];
+    	   var entity=new Object();
+    	   
+    	   for (var i=0; i<fieldList.length;i++) {
+    		   var elemenId=fieldList[i];
+    		   //var elementValue=$(elementId.val()).val();
+    		   var elementValue=document.getElementById(elementId.toString()).value;
+    		   text=text+elementValue;
+    		   //entity[fieldList[i]]=$(fieldList[i]).val;
+    		  // text=text+fieldList[i]+":<input type='text' id='"+  fieldList[i]+"'><br/>";
+    	   }
+    	   div.innerHTML=text;
+       }
+       
+       function showPopup() {
+    	   currentEntityType="region";
+    	   window.open("tableView.html", "hello", "width=640, height=480");
+       }
+       
+    </script>
+
+</head>
+<body>
+	<button name="Click me" onClick="sayHello()">Click me!</button>
+	<button name="result" onClick="loadData()">LoadData</button>
+	<button name="addEntity" onClick="addEntityForm('region')">Add Region</button>
+	<button name="showPopup" onClick="showPopup()">Show popup</button>
+	<br />
+
+	<div id="content"></div>
+
+	<div id="result"></div>
+	
+	<div id="addEntity"></div>
+	
+	<div id="addEntityRequest"></div>
+
+</body>
+</html>

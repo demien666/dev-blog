@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Edit View</title>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script lang="text/javascript" src="js/common.js">
+	
+</script>
+
+<script lang="text/javascript">
+	var currentAction = ACTION_UPDATE;
+	var currentEntityType = ENTITY_REGION;
+	var selectedEntity;
+
+	function onLoad() {
+		this.currentAction = window.opener.currentAction;
+		this.currentEntityType = window.opener.currentEntityType;
+		this.selectedEntity= window.opener.selectedEntity;
+		//currentEntity=new Object();
+		//currentEntity["id"]=1;
+		//currentEntity["regionName"]="Africa";
+		createControls();
+	}
+
+	function createControls() {
+		var div = document.getElementById("debug");
+		var contentDiv = document.getElementById("controls");
+		var buttonDiv = document.getElementById("buttons");
+		buttonDiv.innerHTML = "<button onClick='btnActionClick()'>"
+				+ currentAction
+				+ "</button><button onClick='closeWindow()'>Close window</button> ";
+		var text = "";
+		var fieldList = FIELD_MAP[currentEntityType];
+		for (var i = 0; i < fieldList.length; i++) {
+			var fieldName = fieldList[i].fieldName;
+			var fieldType = fieldList[i].fieldType;
+			//text=text+fieldName+":"+fieldType+"; ";
+			text = text + fieldName;
+			if (fieldType == FIELD_TYPE_STRING) {
+				text = text + "<input id='_"+fieldName+"'";
+				if (currentAction!=ACTION_ADD) {
+					var value="";
+					try {
+						value=selectedEntity[fieldName];
+					} catch (err) {
+						value="Error:"+err.toString();
+					}
+					text=text+" value='" +value+"'";
+				}
+				text=text+"/>";
+			}
+			text = text + "<br/>";
+		}
+		contentDiv.innerHTML = text;
+		//div.innerHTML=text;
+	}
+
+	function populateObject() {
+		var obj = new Object();
+		var fieldList = FIELD_MAP[currentEntityType];
+		for (var i = 0; i < fieldList.length; i++) {
+			var fieldName = fieldList[i].fieldName;
+			var fieldType = fieldList[i].fieldType;
+
+			if (fieldType == FIELD_TYPE_STRING) {
+				var value = document.getElementById("_" + fieldName).value;
+				obj[fieldName] = value;
+			}
+			//text=text+"<br/>";
+		}
+		return obj;
+	}
+
+	function processErrorResult(xhr, statusText) {
+		alert("Error: " + statusText + " xhr:" + xhr);
+	}
+
+	function loadDataSuccess(data) {
+		window.opener.refresh();
+		closeWindow();
+		//alert("Operation " + currentAction + " completed successfully.");
+		//var div=document.getElementById("content");
+		//div.innerHTML=data;   	   
+	}
+/*
+	function sentPostRequest(json) {
+		var URL = URL_MAP[currentEntity];
+		if (currentAction == "ADD") {
+			URL = URL + "add";
+		}
+		$.ajax({
+			type : "POST",
+			headers : {
+				'Accept' : 'application/json',
+				'Content-Type' : 'application/json'
+			},
+			data : json,
+			//url: "http://localhost:8080/spring-cxf-rest/services/rest/regionService/sayhello",	
+			url : URL,
+			cache : false,
+			error : processErrorResult,
+			//error: function(xhr, statusText) {  alert("Error: "+statusText);     },
+			dataType : 'json',
+			success : loadDataSuccess
+		});
+	}
+*/
+	function btnActionClick() {
+		var obj = populateObject();
+		var json = JSON.stringify(obj);
+		var div = document.getElementById("debug");
+		div.innerHTML = json;
+		var URL = URL_MAP[currentEntityType];
+		if (currentAction == ACTION_ADD) {
+			URL = URL + SERVICE_ADD;
+		}
+		if (currentAction == ACTION_UPDATE) {
+			URL = URL + SERVICE_UPDATE;
+		}
+		if (currentAction == ACTION_DELETE) {
+			URL = URL + SERVICE_DELETE;
+		}
+		sentPostRequest(URL, json, loadDataSuccess);
+	}
+
+	function closeWindow() {
+		window.close();
+	}
+</script>
+
+</head>
+<body onLoad="onLoad()">
+	<div id="info"></div>
+	<div id="debug"></div>
+	<div id="controls"></div>
+	<div id="buttons"></div>
+</body>
+</html>

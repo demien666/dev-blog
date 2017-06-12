@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.demien.mockup</groupId>
+  <artifactId>mockup-root</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>${application.name}</name>
+  <url>http://maven.apache.org</url>
+
+   <properties>
+     <application.name>Demien :: mockup </application.name> 
+   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <modules>
+    <module>mockup-core</module>
+    <module>mockup-domain</module>
+    <module>mockup-database</module>
+    <module>mockup-rest</module>
+    <module>mockup-webapp</module>
+  </modules>
+</project>

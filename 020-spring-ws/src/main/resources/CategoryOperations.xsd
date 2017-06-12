@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+            xmlns="http://com/demien/springws/domain/operation"
+            xmlns:category="http://com/demien/springws/domain" targetNamespace="http://com/demien/springws/domain/operation" elementFormDefault="qualified">
+	<xsd:import namespace="http://com/demien/springws/domain" schemaLocation="Category.xsd"/>
+	<xsd:element name="CategorySaveRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="category" type="category:Category"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="CategorySaveResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="category" type="category:Category"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="CategoryGetByIdRequest">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="categoryId" type="xsd:integer"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="CategoryGetByIdResponse">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="category" type="category:Category"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+</xsd:schema>

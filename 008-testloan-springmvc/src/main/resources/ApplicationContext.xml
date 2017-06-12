@@ -1,0 +1,97 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd 
+		http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd"
+	default-lazy-init="false">
+<!--
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<context:component-scan base-package="com.demien" />
+
+
+	<jaxrs:server id="myServices" address="/rest">
+		<jaxrs:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+		</jaxrs:providers>
+		<jaxrs:serviceBeans>
+			<ref bean="LoanResource" />
+			<ref bean="UserResource" />
+		</jaxrs:serviceBeans>
+		<jaxrs:extensionMappings>
+			<entry key="xml" value="application/xml" />
+			<entry key="json" value="application/json" />
+		</jaxrs:extensionMappings>
+	</jaxrs:server>
+
+	
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:~/test" />
+		<property name="username" value="sa" />
+		<property name="password" value="sa" />
+
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>com.demien.testloan.domain.Loan</value>
+				<value>com.demien.testloan.domain.User</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
+			</props>
+		</property>
+	</bean>
+ 
+	<context:annotation-config />
+	<tx:annotation-driven transaction-manager="txManager" />
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+  
+	 <bean id="LoanDAOImpl" class="com.demien.testloan.dao.BaseDAOImpl">
+	    <constructor-arg index="0" type="java.lang.Class" value="com.demien.testloan.domain.Loan" />
+	    <constructor-arg index="1" ref="sessionFactory" />
+	</bean>
+	
+	<bean id="UserDAOImpl" class="com.demien.testloan.dao.BaseDAOImpl">
+	    <constructor-arg index="0" type="java.lang.Class" value="com.demien.testloan.domain.User" />
+	    <constructor-arg index="1" ref="sessionFactory" />	    
+	</bean>
+	<bean id="LoanServiceImpl" class="com.demien.testloan.service.LoanServiceImpl">
+	    <constructor-arg index="0" ref="LoanDAOImpl" />
+	</bean>
+	<bean id="UserServiceImpl" class="com.demien.testloan.service.UserServiceImpl">
+	    <constructor-arg index="0" ref="UserDAOImpl" />
+	</bean>
+	<bean id="LoanResource" class="com.demien.testloan.rest.LoanResource">
+	    <constructor-arg index="0" ref="LoanServiceImpl" />
+	    <constructor-arg index="1" ref="UserServiceImpl" />
+	    <property name="checkHourFrom" value="0"/>
+	    <property name="checkHourTo" value="6"/>
+	</bean>
+	<bean id="UserResource" class="com.demien.testloan.rest.UserResource">
+	    <constructor-arg index="0" ref="UserServiceImpl" />
+	</bean>
+-->
+</beans>

@@ -1,0 +1,62 @@
+allprojects {
+  task hello << { task -> println "I'm $task.project.name" }
+}
+
+subprojects {
+  apply plugin: "java"
+  apply plugin: "groovy"
+
+  repositories {
+        jcenter()
+   }
+
+}
+
+project(':common') { 
+  dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.1'
+    compile "org.spockframework:spock-core:1.0-groovy-2.4"
+    compile "junit:junit:4.10"
+  }
+} 
+
+project(':api') { 
+   dependencies {
+      compile project(':common')
+   }
+} 
+
+project(':app') {
+
+    apply plugin:'application'
+    mainClassName = "App"
+
+   dependencies {
+      compile project(':api')
+   }
+   
+    sourceSets {
+
+        main {
+            java {
+                srcDirs=['src/main/java', 'src/run/java']
+            }
+        }
+
+        integTest {
+            groovy {
+                srcDirs=['src/it/groovy']
+            }
+            compileClasspath = sourceSets.main.output + configurations.testRuntime
+            runtimeClasspath = output + sourceSets.main.output + configurations.testRuntime
+        }
+    }
+    
+    task integTest(type: Test, dependsOn:test) {
+        testClassesDir = sourceSets.integTest.output.classesDir
+        classpath = sourceSets.integTest.runtimeClasspath
+    }
+
+
+}
+

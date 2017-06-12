@@ -12,8 +12,7 @@ public class HibernateUtil {
     private static SessionFactory sessionFactory;
 
     static {
-        Configuration configuration = new Configuration();
-
+        final Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(com.demien.hiblock.dto.User.class);
 
         configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
@@ -29,13 +28,8 @@ public class HibernateUtil {
         sessionFactory = configuration.buildSessionFactory(builder.build());
     }
 
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-
-
     public static Session getSession()
             throws HibernateException {
-        return getSessionFactory().openSession();
+        return sessionFactory.openSession();
     }
 }

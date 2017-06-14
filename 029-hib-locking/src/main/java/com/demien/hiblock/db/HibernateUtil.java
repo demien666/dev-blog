@@ -1,5 +1,6 @@
 package com.demien.hiblock.db;
 
+import com.demien.hiblock.dto.UserGroup;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,7 +15,7 @@ public class HibernateUtil {
     static {
         final Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(com.demien.hiblock.dto.User.class);
-        configuration.addAnnotatedClass(com.demien.hiblock.dto.Group.class);
+        configuration.addAnnotatedClass(UserGroup.class);
 
         configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
         configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/test");
@@ -23,7 +24,6 @@ public class HibernateUtil {
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         configuration.setProperty("hibernate.hbm2ddl.auto", "update");
         configuration.setProperty("hibernate.show_sql", "true");
-        configuration.setProperty("hibernate.connection.pool_size", "10");
 
         StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
         sessionFactory = configuration.buildSessionFactory(builder.build());

@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @Entity
 @DynamicUpdate
 @OptimisticLocking(type = OptimisticLockType.DIRTY)
-public class Group {
+public class UserGroup {
 
     @Id
     @Column
@@ -23,10 +23,10 @@ public class Group {
     @Column
     private String groupDescription;
 
-    public Group() {
+    public UserGroup() {
     }
 
-    public Group(Long groupId, String groupName, String groupDescription) {
+    public UserGroup(Long groupId, String groupName, String groupDescription) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.groupDescription = groupDescription;

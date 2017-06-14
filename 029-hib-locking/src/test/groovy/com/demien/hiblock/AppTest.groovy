@@ -1,63 +1,11 @@
 package com.demien.hiblock
 
-import com.demien.hiblock.db.HibernateUtil
-import com.demien.hiblock.dto.Group
 import com.demien.hiblock.dto.User
-import org.hibernate.LockMode
-import org.hibernate.LockOptions
-import org.hibernate.Session
-import spock.lang.Specification
+import com.demien.hiblock.dto.UserGroup
 
 import javax.persistence.OptimisticLockException
 
-class AppTest extends Specification {
-
-    def Session session = HibernateUtil.getSession()
-
-    def setupSpec() {
-        println "Starting"
-    }
-
-    def cleanupSpec() {
-        println "Done!"
-    }
-
-    def setup() {
-        doInTransaction({
-            session.createQuery("delete from User").executeUpdate()
-            session.createQuery("delete from Group").executeUpdate()
-        })
-    }
-
-    def cleanup() {
-        session.clear()
-    }
-
-    def doInTransaction(f) {
-        def tx = session.getTransaction()
-        tx.begin()
-        f()
-        tx.commit()
-    }
-
-    def createEntity(entity) {
-        doInTransaction({
-            session.persist(entity)
-        })
-    }
-
-    def updateEntity(entity) {
-        doInTransaction({
-            session.update(entity)
-        })
-    }
-
-    def updateEntityInAnotherSession(entity) {
-        def oldSession = session
-        session = HibernateUtil.getSession()
-        updateEntity(entity)
-        session = oldSession
-    }
+class AppTest extends BaseTest {
 
     def "it shoud create User entity"() {
         given:
@@ -74,7 +22,7 @@ class AppTest extends Specification {
     def "it should fail if record was changed by another session"() {
         given:
         createEntity(new User(1l, "Huan Sebastyan"))
-        User loadedUser1 = session.get(User.class, 1L, new LockOptions(LockMode.OPTIMISTIC))
+        User loadedUser1 = session.get(User.class, 1L)
         User loadedUser2 = session.get(User.class, 1L)
         loadedUser1.setUserName("Updated1")
         loadedUser2.setUserName("Updated2")
@@ -90,9 +38,9 @@ class AppTest extends Specification {
 
     def "it should fail if the same fields were changed"() {
         given:
-        createEntity(new Group(1L, "SYSDBA", "Database Administrators"))
-        Group loadedGroup1 = session.get(Group.class, 1L)
-        Group loadedGroup2 = session.get(Group.class, 1L)
+        createEntity(new UserGroup(1L, "SYSDBA", "Database Administrators"))
+        UserGroup loadedGroup1 = session.get(UserGroup.class, 1L)
+        UserGroup loadedGroup2 = session.get(UserGroup.class, 1L)
         loadedGroup1.setGroupName("Updated1")
         loadedGroup2.setGroupName("Updated2")
 
@@ -102,8 +50,6 @@ class AppTest extends Specification {
 
         then:
         thrown OptimisticLockException
-
-
     }
 
 

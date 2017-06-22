@@ -1,5 +1,6 @@
 package com.demien.hiblock.db;
 
+import com.demien.hiblock.dto.Role;
 import com.demien.hiblock.dto.UserGroup;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -16,11 +17,12 @@ public class HibernateUtil {
         final Configuration configuration = new Configuration();
         configuration.addAnnotatedClass(com.demien.hiblock.dto.User.class);
         configuration.addAnnotatedClass(UserGroup.class);
+        configuration.addAnnotatedClass(Role.class);
 
         configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
         configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/test");
         configuration.setProperty("hibernate.connection.username", "root");
-        configuration.setProperty("hibernate.connection.password", "root");
+        configuration.setProperty("hibernate.connection.password", "");
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         configuration.setProperty("hibernate.hbm2ddl.auto", "update");
         configuration.setProperty("hibernate.show_sql", "true");

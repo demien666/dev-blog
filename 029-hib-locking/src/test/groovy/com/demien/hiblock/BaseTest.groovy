@@ -1,8 +1,11 @@
 package com.demien.hiblock
 
 import com.demien.hiblock.db.HibernateUtil
+import com.demien.hiblock.dto.Role
 import com.demien.hiblock.dto.User
 import com.demien.hiblock.dto.UserGroup
+import org.hibernate.LockMode
+import org.hibernate.LockOptions
 import org.hibernate.Session
 import spock.lang.Specification
 
@@ -10,7 +13,7 @@ import spock.lang.Specification
  * Created by dmytro.kovalskyi on 6/13/2017.
  */
 class BaseTest extends Specification {
-    def Session session = HibernateUtil.getSession()
+    Session session = HibernateUtil.getSession()
 
     def setupSpec() {
         println "Starting"
@@ -24,6 +27,7 @@ class BaseTest extends Specification {
         doInTransaction({
             session.createQuery("delete from User").executeUpdate()
             session.createQuery("delete from UserGroup").executeUpdate()
+            session.createQuery("delete from Role").executeUpdate()
         })
     }
 
@@ -36,6 +40,13 @@ class BaseTest extends Specification {
         tx.begin()
         f()
         tx.commit()
+    }
+
+    def doInAnotherSession(f) {
+        def oldSession = session
+        session = HibernateUtil.getSession()
+        f()
+        session = oldSession
     }
 
     def createEntity(entity) {
@@ -51,10 +62,15 @@ class BaseTest extends Specification {
     }
 
     def updateEntityInAnotherSession(entity) {
-        def oldSession = session
-        session = HibernateUtil.getSession()
-        updateEntity(entity)
-        session = oldSession
+        doInAnotherSession({ updateEntity(entity) })
+    }
+
+    def lockEntity(entity) {
+        session.buildLockRequest(new LockOptions(LockMode.PESSIMISTIC_WRITE)).lock(entity)
+    }
+
+    def lockEntityInAnotherSession(entity) {
+        doInAnotherSession({ lockEntity(entity) })
     }
 
     def createTestUser() {
@@ -71,6 +87,14 @@ class BaseTest extends Specification {
 
     def loadTestGroup() {
         return session.get(UserGroup.class, 1L)
+    }
+
+    def createTestRole() {
+        createEntity(new Role(1L, "SYSDBA", "Admin role"))
+    }
+
+    def loadTestRole() {
+        return session.get(Role.class, 1L)
     }
 
 }

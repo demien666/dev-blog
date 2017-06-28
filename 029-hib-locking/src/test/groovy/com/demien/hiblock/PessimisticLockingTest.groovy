@@ -2,26 +2,28 @@ package com.demien.hiblock
 
 import com.demien.hiblock.dto.Role
 
+import javax.persistence.LockTimeoutException
+
 class PessimisticLockingTest extends BaseTest {
 
-    def "it should throw the exception"() {
+    def "it should throw the exception on trying to update locked record"() {
         given:
         createTestRole()
         Role role1 = loadTestRole()
+
         lockEntity(role1)
-        role1.setRoleDescription("Updated description")
 
         when:
-        Role role2 = loadTestRole()
-        lockEntityInAnotherSession(role2)
+        doInAnotherSession({
 
-        role2.setRoleName("Updated name")
-        updateEntityInAnotherSession(role2)
+            Role role2 = loadTestRole()
+            role2.setRoleDescription("Updated description")
+            mergeEntity(role2)
 
-        updateEntity(role1)
+        })
 
         then:
-        System.out.println("done")
+        thrown LockTimeoutException
 
     }
 }

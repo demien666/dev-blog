@@ -6,14 +6,11 @@ import com.demien.hiblock.dto.User
 import com.demien.hiblock.dto.UserGroup
 import org.hibernate.LockMode
 import org.hibernate.LockOptions
-import org.hibernate.Session
+import org.hibernate.resource.transaction.spi.TransactionStatus
 import spock.lang.Specification
 
-/**
- * Created by dmytro.kovalskyi on 6/13/2017.
- */
-class BaseTest extends Specification {
-    Session session = HibernateUtil.getSession()
+abstract class BaseTest extends Specification {
+    def session = HibernateUtil.getSession()
 
     def setupSpec() {
         println "Starting"
@@ -37,6 +34,9 @@ class BaseTest extends Specification {
 
     def doInTransaction(f) {
         def tx = session.getTransaction()
+        if (tx.getStatus().equals(TransactionStatus.ACTIVE)) {
+            tx.commit()
+        }
         tx.begin()
         f()
         tx.commit()
@@ -49,6 +49,18 @@ class BaseTest extends Specification {
         session = oldSession
     }
 
+    def doAsync(f) {
+        def runnale = new Runnable() {
+            @Override
+            void run() {
+                f()
+            }
+        }
+        def thread = new Thread(runnale)
+        thread.start()
+
+    }
+
     def createEntity(entity) {
         doInTransaction({
             session.persist(entity)
@@ -57,7 +69,13 @@ class BaseTest extends Specification {
 
     def updateEntity(entity) {
         doInTransaction({
-            session.update(entity)
+            session.merge(entity)
+        })
+    }
+
+    def mergeEntity(entity) {
+        doInTransaction({
+            session.merge(entity)
         })
     }
 

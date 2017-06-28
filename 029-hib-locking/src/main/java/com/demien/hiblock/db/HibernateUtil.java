@@ -1,6 +1,7 @@
 package com.demien.hiblock.db;
 
 import com.demien.hiblock.dto.Role;
+import com.demien.hiblock.dto.User;
 import com.demien.hiblock.dto.UserGroup;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -15,7 +16,7 @@ public class HibernateUtil {
 
     static {
         final Configuration configuration = new Configuration();
-        configuration.addAnnotatedClass(com.demien.hiblock.dto.User.class);
+        configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(UserGroup.class);
         configuration.addAnnotatedClass(Role.class);
 

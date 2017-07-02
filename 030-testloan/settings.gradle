@@ -1,0 +1,5 @@
+rootProject.name = 'testloan'
+include 'common'
+include 'client'
+include 'loan'
+

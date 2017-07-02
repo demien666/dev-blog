@@ -4,17 +4,16 @@ import com.demien.testloan.vo.ClientId;
 
 public class Client {
 
-    private final ClientId clientId;
+    private ClientId clientId;
     private final String name;
 
-    public Client(ClientId clientId, String name) {
-        this.clientId = clientId;
+    public Client(String name) {
         this.name = name;
     }
 
 
     public Client renameTo(String newName) {
-        return new Client(clientId, newName);
+        return new Client(newName);
     }
 
 

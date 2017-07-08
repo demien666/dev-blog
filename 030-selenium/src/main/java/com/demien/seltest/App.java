@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -22,10 +23,23 @@ public class App {
         driver.findElement(By.id(id)).click();
     }
 
+    public static void select(String id, String option) {
+        Select select = new Select(driver.findElement(By.id(id)));
+        select.selectByVisibleText(option);
+    }
+
     public static void addDepartment(String id, String name) {
         clearAndSet("input-departments-id", id);
         clearAndSet("input-departments-name", name);
         click("submit-departments");
+    }
+
+    public static void addUser(String id, String name, String email, String department) {
+        clearAndSet("input-users-id", id);
+        clearAndSet("input-users-name", name);
+        clearAndSet("input-users-email", email);
+        select("select-users-department", department);
+        click("submit-users");
     }
 
     public static void checkTable(String id, List<String> values) {
@@ -45,7 +59,7 @@ public class App {
     }
 
     public static void checkTable(String id, String... values) {
-        checkTable(id, new LinkedList<String>(Arrays.asList(values)));
+        checkTable(id, new LinkedList<>(Arrays.asList(values)));
     }
 
     public static void main(String[] args) {
@@ -60,7 +74,10 @@ public class App {
 
         checkTable("table-departments", "IT", "ADM", "SEQ", "Informational technologies", "Administration", "Security");
 
+        addUser("JBL", "Joe Black", "joe.black@email.com", "Security");
+        addUser("HSEB", "Huan Sebastyan", "huan.sebastyan@email.com", "Administration");
 
+        checkTable("table-users", "JBL", "Joe Black", "joe.black@email.com", "Security", "HSEB", "Huan Sebastyan", "huan.sebastyan@email.com", "Administration");
 
     }
 }

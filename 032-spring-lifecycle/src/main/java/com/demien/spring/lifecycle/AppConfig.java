@@ -80,14 +80,14 @@ public class AppConfig {
                 if (beanClass!=null) {
                     return Proxy.newProxyInstance(beanClass.getClassLoader(), beanClass.getInterfaces(), new InvocationHandler() {
                         @Override
-                        public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
+                        public Object invoke(Object proxy, Method method, Object[] objects) throws Throwable {
                             long before  = System.nanoTime();
 
-                            method.invoke(o, objects);
+                            Object retval = method.invoke(bean, objects);
                             if (profilerSettings.isEnabled()) {
                                 System.out.println("exec time:"+(System.nanoTime()-before));
                             }
-                            return null;
+                            return retval;
                         }
                     });
                 }

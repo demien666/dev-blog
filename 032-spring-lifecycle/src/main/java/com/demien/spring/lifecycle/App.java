@@ -11,12 +11,12 @@ public class App {
         ctx.refresh();
         Messenger messenger = ctx.getBean(Messenger.class);
         messenger.printMessage();
-/*
+
         while (true) {
             Thread.sleep(1000);
             messenger.printMessage();
         }
-*/
+
 
 
     }

@@ -10,10 +10,9 @@ public class App {
         ctx.register(AppConfig.class);
         ctx.refresh();
         Messenger messenger = ctx.getBean(Messenger.class);
-        messenger.printMessage();
 
         while (true) {
-            Thread.sleep(1000);
+            Thread.sleep(3000);
             messenger.printMessage();
         }
 

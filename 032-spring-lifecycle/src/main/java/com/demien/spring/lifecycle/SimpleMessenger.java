@@ -20,7 +20,6 @@ public class SimpleMessenger implements Messenger {
         printMessage();
     }
 
-    @PostConstruct
     public void init() {
         System.out.print("Init: ");
         printMessage();

@@ -49,7 +49,7 @@ public class AppConfig {
     */
 
 
-    @Bean
+    @Bean(initMethod = "init")
     Messenger messenger() {
         SimpleMessenger messenger = new SimpleMessenger();
         messenger.setMessageText("Hello");

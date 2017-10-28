@@ -1,8 +1,5 @@
-package com.demien.spring.lifecycle;
+package com.demien.spring.lifecycle.jmx;
 
-/**
- * Created by demien on 01.10.17.
- */
 public class ProfilerSettings implements ProfilerSettingsMBean {
 
     private boolean enabled;

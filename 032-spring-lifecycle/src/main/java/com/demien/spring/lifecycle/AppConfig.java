@@ -2,12 +2,17 @@ package com.demien.spring.lifecycle;
 
 import com.demien.spring.lifecycle.annotations.GeneratedName;
 import com.demien.spring.lifecycle.annotations.Profiling;
+import com.demien.spring.lifecycle.beans.Messenger;
+import com.demien.spring.lifecycle.beans.SimpleMessenger;
+import com.demien.spring.lifecycle.jmx.ProfilerSettings;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.CommonAnnotationBeanPostProcessor;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.util.ReflectionUtils;
 
 import javax.management.MBeanServer;
@@ -41,12 +46,18 @@ public class AppConfig {
         return result.toString();
     }
 
-    /*
     @Bean
-    BeanPostProcessor commonAnnotationBeanPostProcessor() {
-        return new CommonAnnotationBeanPostProcessor();
+    ApplicationListener<ContextRefreshedEvent> refreshedEventApplicationListener() {
+        return new ApplicationListener<ContextRefreshedEvent>() {
+            @Override
+            public void onApplicationEvent(ContextRefreshedEvent event) {
+                ApplicationContext ctx = event.getApplicationContext();
+                Messenger messenger = ctx.getBean(Messenger.class);
+                messenger.setUp("!");
+            }
+        };
+
     }
-    */
 
 
     @Bean(initMethod = "init")

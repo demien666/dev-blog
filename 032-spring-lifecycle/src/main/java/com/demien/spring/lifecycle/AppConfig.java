@@ -68,7 +68,7 @@ public class AppConfig {
     }
 
     @Bean
-    BeanPostProcessor randomIntPostProcessor() {
+    BeanPostProcessor nameGenerationPostProcessor() {
 
         return new BeanPostProcessor() {
             @Override

@@ -63,7 +63,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        System.setProperty("webdriver.chrome.driver", "/home/dmitry/Dev/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "d:/dev/selenium/chromedriver.exe");
         driver = new ChromeDriver();
 
         driver.get("http://localhost:3000");

@@ -7,18 +7,20 @@ import com.demien.main.security.domain.user.User;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @AggregateRoot
 public class Loan extends AbstractEntity {
 
     private BigDecimal amount;
     private BigDecimal rate;
+    private BigDecimal payed = new BigDecimal(0);
 
     private Client client;
     private User creator;
-    private Date createDate = new Date();
     private Date loanBeginDate;
     private Date loanEndDate;
+    private List<LoanHistory> history;
 
     public BigDecimal getAmount() {
         return amount;
@@ -66,5 +68,17 @@ public class Loan extends AbstractEntity {
 
     public void setLoanEndDate(Date loanEndDate) {
         this.loanEndDate = loanEndDate;
+    }
+
+    public List<LoanHistory> getHistory() {
+        return history;
+    }
+
+    public void pay(BigDecimal money) {
+        this.payed.add(money);
+    }
+
+    public BigDecimal getPayed() {
+        return payed;
     }
 }

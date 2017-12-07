@@ -1,18 +1,23 @@
-package com.demien.ddd.security.domain;
+package com.demien.main.security.domain.user;
 
-import com.demien.ddd.shared.annotations.Entity;
-import com.demien.ddd.shared.domain.AbstractEntity;
+import com.demien.ddd.annotations.AggregateRoot;
+import com.demien.ddd.base.AbstractEntity;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@AggregateRoot
 public class User extends AbstractEntity {
 
     private String login;
 
     private PasswordInfo passwordInfo;
     private Set<Permission> permissions = new HashSet<Permission>();
+
+    public User(String login, PasswordInfo passwordInfo) {
+        this.login = login;
+        this.passwordInfo = passwordInfo;
+    }
 
     public String getLogin() {
         return login;

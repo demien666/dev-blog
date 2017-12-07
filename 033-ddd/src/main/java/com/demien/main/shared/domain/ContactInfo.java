@@ -1,6 +1,6 @@
-package com.demien.ddd.shared.domain;
+package com.demien.main.shared.domain;
 
-import com.demien.ddd.shared.annotations.ValueObject;
+import com.demien.ddd.annotations.ValueObject;
 
 @ValueObject
 public class ContactInfo {

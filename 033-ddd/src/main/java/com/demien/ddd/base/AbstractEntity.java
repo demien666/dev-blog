@@ -1,4 +1,4 @@
-package com.demien.ddd.shared.domain;
+package com.demien.ddd.base;
 
 public abstract class AbstractEntity {
     private Long id;

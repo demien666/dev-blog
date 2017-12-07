@@ -1,6 +1,4 @@
-package com.demien.ddd.shared.repository;
-
-import com.demien.ddd.shared.domain.AbstractEntity;
+package com.demien.ddd.base;
 
 import java.util.HashMap;
 import java.util.Map;

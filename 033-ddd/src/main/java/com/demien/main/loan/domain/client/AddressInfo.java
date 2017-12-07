@@ -1,6 +1,6 @@
-package com.demien.ddd.loan.domain;
+package com.demien.main.loan.domain.client;
 
-import com.demien.ddd.shared.annotations.ValueObject;
+import com.demien.ddd.annotations.ValueObject;
 
 @ValueObject
 public class AddressInfo {

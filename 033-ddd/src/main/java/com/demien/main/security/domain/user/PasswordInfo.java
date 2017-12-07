@@ -1,6 +1,6 @@
-package com.demien.ddd.security.domain;
+package com.demien.main.security.domain.user;
 
-import com.demien.ddd.shared.annotations.ValueObject;
+import com.demien.ddd.annotations.ValueObject;
 
 import java.util.Date;
 
@@ -8,11 +8,10 @@ import java.util.Date;
 public class PasswordInfo {
 
     private String password;
-    private Date changed;
+    private Date changed = new Date();
 
     public PasswordInfo(String password) {
         this.password = password;
-        changed = new Date();
     }
 
     public Date getChanged() {

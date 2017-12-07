@@ -1,13 +1,16 @@
-package com.demien.ddd.loan.domain;
+package com.demien.main.loan.domain.client;
 
-import com.demien.ddd.shared.annotations.Entity;
-import com.demien.ddd.shared.domain.AbstractEntity;
-import com.demien.ddd.shared.domain.ContactInfo;
+import com.demien.ddd.annotations.AggregateRoot;
+import com.demien.ddd.base.AbstractEntity;
+import com.demien.main.shared.domain.ContactInfo;
 
 import java.util.Date;
 
-@Entity
+@AggregateRoot
 public class Client extends AbstractEntity {
+
+    private String name;
+    private String lastName;
 
     private AddressInfo addressInfo;
     private ContactInfo contactInfo;

@@ -3,7 +3,7 @@ package com.demien.main.loan.application.impl;
 import com.demien.main.loan.application.api.LoanService;
 import com.demien.main.loan.domain.client.Client;
 import com.demien.main.loan.domain.loan.Loan;
-import com.demien.main.loan.domain.loan.LoanRepository;
+import com.demien.main.loan.infrastructure.repo.impl.LoanInMemoryRepositoryImpl;
 import com.demien.main.security.domain.user.User;
 
 import java.math.BigDecimal;
@@ -13,7 +13,7 @@ import java.util.Optional;
 public class LoanServiceImpl implements LoanService {
 
     //@Inject
-    LoanRepository loanRepository;
+    LoanInMemoryRepositoryImpl loanRepository;
 
 
     @Override

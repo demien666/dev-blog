@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class AbstractRepository<T extends AbstractEntity> {
+public class AbstractInMemoryRepository<T extends AbstractEntity> {
 
     private Map<Long, T> storage = new HashMap<Long, T>();
 

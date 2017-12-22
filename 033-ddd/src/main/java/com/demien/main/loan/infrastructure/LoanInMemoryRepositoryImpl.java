@@ -1,4 +1,4 @@
-package com.demien.main.loan.infrastructure.repo.impl;
+package com.demien.main.loan.infrastructure;
 
 import com.demien.ddd.base.AbstractInMemoryRepository;
 import com.demien.main.loan.domain.client.Client;

@@ -1,4 +1,4 @@
-package com.demien.main.loan.infrastructure.repo.impl;
+package com.demien.main.loan.infrastructure;
 
 import com.demien.ddd.annotations.Repository;
 import com.demien.ddd.base.AbstractInMemoryRepository;

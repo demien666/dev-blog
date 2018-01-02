@@ -42,4 +42,8 @@ public class User extends AbstractEntity {
     public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
+
+    public boolean hasPermission(Permission permission) {
+        return permissions.contains(permission);
+    }
 }

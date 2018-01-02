@@ -22,6 +22,15 @@ public class Loan extends AbstractEntity {
     private Date loanEndDate;
     private List<LoanHistory> history;
 
+    public Loan(BigDecimal amount, BigDecimal rate, Client client, User creator, Date loanEndDate, Date loanBeginDate) {
+        this.amount = amount;
+        this.rate = rate;
+        this.client = client;
+        this.creator = creator;
+        this.loanEndDate = loanEndDate;
+        this.loanBeginDate = loanBeginDate;
+    }
+
     public BigDecimal getAmount() {
         return amount;
     }

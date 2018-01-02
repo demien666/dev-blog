@@ -1,10 +1,12 @@
 package com.demien.main.loan.application.impl;
 
 import com.demien.main.loan.application.api.LoanService;
+import com.demien.main.loan.application.api.PermissionException;
 import com.demien.main.loan.domain.client.Client;
-import com.demien.main.loan.domain.loan.Loan;
-import com.demien.main.loan.infrastructure.LoanInMemoryRepositoryImpl;
+import com.demien.main.loan.domain.loan.*;
+import com.demien.main.security.domain.user.Permission;
 import com.demien.main.security.domain.user.User;
+import com.demien.main.system.application.SessionContext;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,7 +15,18 @@ import java.util.Optional;
 public class LoanServiceImpl implements LoanService {
 
     //@Inject
-    LoanInMemoryRepositoryImpl loanRepository;
+    LoanRepository loanRepository;
+
+    //@Inject
+    LoanFactory loanFactory;
+
+    //@Inject
+    LoanHistoryFactory loanHistoryFactory;
+
+    // @Inject
+    SessionContext sessionContext;
+
+    public static final String PERMISSION_VIOLATION = "Current user don't have required permission";
 
 
     @Override
@@ -21,23 +34,42 @@ public class LoanServiceImpl implements LoanService {
         return null;
     }
 
+    public void checkPermission(Permission permission) {
+        User user = sessionContext.getCurrentUser();
+        if (!user.hasPermission(permission)) throw new PermissionException(permission, user, PERMISSION_VIOLATION);
+    }
+
     @Override
-    public Optional<Loan> createLoan(Client client, User user, BigDecimal amount, BigDecimal rate) {
+    public Optional<Loan> createLoan(Client client, BigDecimal amount, BigDecimal rate, Date loanEndDate, Date loanBeginDate) {
+        checkPermission(Permission.CREATE_LOAN);
+
+        Loan loan = loanFactory.create(amount, rate, client, loanEndDate, loanBeginDate);
+        loanRepository.save(loan);
+
+        loan.getHistory().add(loanHistoryFactory.create(loan, LoanAction.CREATE_LOAN));
+
+        return Optional.ofNullable(loan);
+    }
+
+    @Override
+    public Optional<Loan> updateLoan(Long loanId, BigDecimal pay) {
+        checkPermission(Permission.UPDATE_LOAN);
+        Loan loan = loanRepository.findById(loanId);
+
+
+        User user = sessionContext.getCurrentUser();
+        if (!user.hasPermission(Permission.UPDATE_LOAN))
+            throw new PermissionException(Permission.CREATE_LOAN, user, PERMISSION_VIOLATION);
         return null;
     }
 
     @Override
-    public Optional<Loan> updateLoan(Loan loan, BigDecimal pay) {
+    public Optional<Loan> extendLoan(Long loanId, Date newEndDate) {
         return null;
     }
 
     @Override
-    public Optional<Loan> extendLoan(Loan loan, Date newEndDate) {
-        return null;
-    }
-
-    @Override
-    public Optional<Loan> deleteLoan(Loan loan) {
+    public Optional<Loan> deleteLoan(Long loanId) {
         return null;
     }
 }

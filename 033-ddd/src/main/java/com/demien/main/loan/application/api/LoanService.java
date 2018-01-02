@@ -2,7 +2,6 @@ package com.demien.main.loan.application.api;
 
 import com.demien.main.loan.domain.client.Client;
 import com.demien.main.loan.domain.loan.Loan;
-import com.demien.main.security.domain.user.User;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -11,12 +10,12 @@ import java.util.Optional;
 public interface LoanService {
     BigDecimal getRate(Client client, BigDecimal amount);
 
-    Optional<Loan> createLoan(Client client, User user, BigDecimal amount, BigDecimal rate);
+    Optional<Loan> createLoan(Client client, BigDecimal amount, BigDecimal rate, Date loanEndDate, Date loanBeginDate);
 
-    Optional<Loan> updateLoan(Loan loan, BigDecimal pay);
+    Optional<Loan> updateLoan(Long loanId, BigDecimal pay);
 
-    Optional<Loan> extendLoan(Loan loan, Date newEndDate);
+    Optional<Loan> extendLoan(Long loanId, Date newEndDate);
 
-    Optional<Loan> deleteLoan(Loan loan);
+    Optional<Loan> deleteLoan(Long loanId);
 
 }

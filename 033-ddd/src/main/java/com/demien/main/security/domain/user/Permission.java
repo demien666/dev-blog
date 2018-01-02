@@ -1,5 +1,5 @@
 package com.demien.main.security.domain.user;
 
 public enum Permission {
-    CREATE, UPDATE, DELETE, EXTEND
+    CREATE_LOAN, UPDATE_LOAN, DELETE_LOAN, EXTEND_LOAN
 }

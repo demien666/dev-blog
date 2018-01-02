@@ -8,11 +8,11 @@ import java.util.Date;
 @ValueObject
 public class LoanHistory {
     private Date date;
-    private String action;
+    private LoanAction action;
     private User user;
 
 
-    public LoanHistory(Date date, String action, User user) {
+    public LoanHistory(Date date, LoanAction action, User user) {
         this.date = date;
         this.action = action;
         this.user = user;
@@ -22,7 +22,7 @@ public class LoanHistory {
         return date;
     }
 
-    public String getAction() {
+    public LoanAction getAction() {
         return action;
     }
 

@@ -56,10 +56,10 @@ public class LoanServiceImpl implements LoanService {
         checkPermission(Permission.UPDATE_LOAN);
         Loan loan = loanRepository.findById(loanId);
 
+        //if (!loan.canBeUpdated()) throw
 
-        User user = sessionContext.getCurrentUser();
-        if (!user.hasPermission(Permission.UPDATE_LOAN))
-            throw new PermissionException(Permission.CREATE_LOAN, user, PERMISSION_VIOLATION);
+
+
         return null;
     }
 

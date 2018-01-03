@@ -90,4 +90,8 @@ public class Loan extends AbstractEntity {
     public BigDecimal getPayed() {
         return payed;
     }
+
+    public  boolean canBeUpdated() {
+        return true;
+    }
 }

@@ -1,4 +1,4 @@
-package com.demien.ddd.base;
+package com.demien.ddd.application.base;
 
 import java.util.ArrayList;
 import java.util.HashMap;

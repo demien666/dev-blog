@@ -1,8 +1,7 @@
 package com.demien.ddd.group.domain;
 
-import com.demien.ddd.application.SystemContext;
-import com.demien.ddd.base.BaseEntity;
-import com.demien.ddd.base.annotations.DDDEntity;
+import com.demien.ddd.application.base.BaseEntity;
+import com.demien.ddd.application.annotations.DDDEntity;
 import com.demien.ddd.group.events.GroupEnableEvent;
 
 @DDDEntity
@@ -29,11 +28,11 @@ public class Group extends BaseEntity {
 
     public void enable() {
         this.enabled = true;
-        SystemContext.dispatchEvent(new GroupEnableEvent(this.getId(), this.enabled));
+        getEventBus().dispatchEvent(new GroupEnableEvent(this.getId(), this.enabled));
     }
 
     public void disable() {
         this.enabled = false;
-        SystemContext.dispatchEvent(new GroupEnableEvent(this.getId(), this.enabled));
+        getEventBus().dispatchEvent(new GroupEnableEvent(this.getId(), this.enabled));
     }
 }

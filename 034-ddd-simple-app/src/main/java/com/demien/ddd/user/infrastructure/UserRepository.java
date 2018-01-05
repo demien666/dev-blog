@@ -1,13 +1,11 @@
 package com.demien.ddd.user.infrastructure;
 
-import com.demien.ddd.base.BaseRepository;
-import com.demien.ddd.base.annotations.DDDRepository;
+import com.demien.ddd.application.base.BaseRepository;
+import com.demien.ddd.application.annotations.DDDRepository;
 import com.demien.ddd.user.domain.User;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @DDDRepository
 @Component

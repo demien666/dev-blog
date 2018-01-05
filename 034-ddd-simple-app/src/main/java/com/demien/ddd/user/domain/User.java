@@ -1,9 +1,10 @@
 package com.demien.ddd.user.domain;
 
-import com.demien.ddd.base.BaseEntity;
-import com.demien.ddd.base.annotations.DDDAggregateRoot;
-import com.demien.ddd.base.annotations.DDDEntity;
+import com.demien.ddd.application.base.BaseEntity;
+import com.demien.ddd.application.annotations.DDDAggregateRoot;
+import com.demien.ddd.application.annotations.DDDEntity;
 import com.demien.ddd.group.domain.Group;
+import com.demien.ddd.user.events.UserGroupMessageEvent;
 
 import java.util.Set;
 
@@ -15,13 +16,12 @@ public class User extends BaseEntity {
     private Set<ContactInfo> contactInfos;
     private UserStatus status;
     private Group group;
-    private User createdBy;
 
-    public User(String name, UserStatus status, Group group, User createdBy) {
+    public User(String name, UserStatus status, Group group) {
         this.name = name;
         this.status = status;
         this.group = group;
-        this.createdBy = createdBy;
+        getEventBus().dispatchEvent(new UserGroupMessageEvent(group.getId(), "There is a new user in your group:" + name));
     }
 
     public String getName() {
@@ -32,12 +32,16 @@ public class User extends BaseEntity {
         this.name = name;
     }
 
-    public Set<ContactInfo> getContactInfos() {
-        return contactInfos;
+    public ContactInfo[] getContactInfos() {
+        return (ContactInfo[]) contactInfos.toArray();
     }
 
-    public void setContactInfos(Set<ContactInfo> contactInfos) {
-        this.contactInfos = contactInfos;
+    public void addContactInfo(ContactInfo contactInfo) {
+        this.contactInfos.add(contactInfo);
+    }
+
+    public void removeContactInfo(ContactInfo contactInfo) {
+        this.contactInfos.remove(contactInfo);
     }
 
     public UserStatus getStatus() {
@@ -56,11 +60,4 @@ public class User extends BaseEntity {
         this.group = group;
     }
 
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
 }

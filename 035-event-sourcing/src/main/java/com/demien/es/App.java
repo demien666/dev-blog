@@ -17,18 +17,38 @@ public class App {
     public void test() {
         EventBus eventBus = new EventBus();
         ClientRepository clientRepository = new ClientRepository();
-        ClientEventHandler clientEventHandler = new ClientEventHandler(clientRepository);
-        eventBus.registerHandler(ClientCRUDEvent.class, clientEventHandler);
-        String e1 = eventBus.dispatchEvent(new ClientCRUDEvent(EventType.CREATE, new ClientVO("Joe", "NY")));
+        ClientCRUDEventHandler clientCRUDEventHandler = new ClientCRUDEventHandler(clientRepository);
+        eventBus.registerHandler(ClientCRUDEvent.class, clientCRUDEventHandler);
+        ClientChangeStateEventHandler clientChangeStateEventHandler = new ClientChangeStateEventHandler(clientRepository);
+        eventBus.registerHandler(ClientChangeStateEvent.class, clientChangeStateEventHandler);
+
+        String guid = eventBus.dispatchEvent(new ClientCRUDEvent(EventType.CREATE, new ClientCRUDRequest("Joe", "NY")));
         pause();
-        ClientEntity clientEntity = (ClientEntity) eventBus.getEventByGUID(e1).getResponse();
+        ClientEntity clientEntity = (ClientEntity) eventBus.getEventByGUID(guid).getResponse();
         System.out.println(clientEntity);
 
 
-        String e2 = eventBus.dispatchEvent(new ClientCRUDEvent(EventType.UPDATE, new ClientVO(clientEntity.getId(), "Joe", "NY")));
+        guid = eventBus.dispatchEvent(new ClientCRUDEvent(EventType.UPDATE, new ClientCRUDRequest(clientEntity.getId(), "Joe", "HOUSTON")));
         pause();
-        Event event = eventBus.getEventByGUID(e2);
+        Event event = eventBus.getEventByGUID(guid);
         System.out.println(event.getErrorMessage());
+
+        guid = eventBus.dispatchEvent(new ClientChangeStateEvent(EventType.APPROVE, new ClientChangeStateRequest(clientEntity.getId(), -1, ClientState.APPROVED)));
+        pause();
+        System.out.println(clientEntity);
+
+        guid = eventBus.dispatchEvent(new ClientCRUDEvent(EventType.UPDATE, new ClientCRUDRequest(clientEntity.getId(), "Joe", "HOUSTON")));
+        pause();
+        event = eventBus.getEventByGUID(guid);
+        System.out.println(event.getState());
+
+        System.out.println(clientEntity);
+
+
+
+
+
+
 
 
 

@@ -1,16 +1,16 @@
 package com.demien.es.system.event;
 
-public abstract class Event<P, R> {
+public abstract class Event<REQ, RESP> {
     private String GUID;
     private EventState state = EventState.CREATED;
     private final EventType type;
-    private final P payload;
-    private R response;
+    private final REQ request;
+    private RESP response;
     private String errorMessage;
 
-    public Event(EventType type, P payload) {
+    public Event(EventType type, REQ request) {
         this.type = type;
-        this.payload = payload;
+        this.request = request;
     }
 
     public void setGUID(String GUID) {
@@ -29,15 +29,15 @@ public abstract class Event<P, R> {
         return state;
     }
 
-    public P getPayload() {
-        return payload;
+    public REQ getRequest() {
+        return request;
     }
 
-    public R getResponse() {
+    public RESP getResponse() {
         return response;
     }
 
-    public void setResponse(R response) {
+    public void setResponse(RESP response) {
         this.response = response;
     }
 

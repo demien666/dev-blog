@@ -4,11 +4,11 @@ import com.demien.es.system.EventHandler;
 import com.demien.es.system.event.EventState;
 import com.demien.es.system.event.EventType;
 
-public class ClientEventHandler implements EventHandler<ClientCRUDEvent> {
+public class ClientCRUDEventHandler implements EventHandler<ClientCRUDEvent> {
 
     private final ClientRepository clientRepository;
 
-    public ClientEventHandler(ClientRepository clientRepository) {
+    public ClientCRUDEventHandler(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 
@@ -28,21 +28,21 @@ public class ClientEventHandler implements EventHandler<ClientCRUDEvent> {
     }
 
     private void processUpdate(ClientCRUDEvent event) {
-        ClientEntity entity = clientRepository.findById(event.getPayload().getId());
+        ClientEntity entity = clientRepository.findById(event.getRequest().getId());
         if (entity.getState() != ClientState.APPROVED) {
             event.setErrorMessage("Client is in a wrong state! State should be APPROVED instead of " + entity.getState());
             event.setState(EventState.FILED);
             return;
         }
 
-        entity.update(event.getPayload());
+        entity.update(event.getRequest());
         clientRepository.save(entity);
         event.setResponse(entity);
         event.setState(EventState.PROCESSED);
     }
 
     private void processCreate(ClientCRUDEvent event) {
-        ClientEntity entity = new ClientEntity(event.getPayload());
+        ClientEntity entity = new ClientEntity(event.getRequest());
         clientRepository.save(entity);
         event.setResponse(entity);
         event.setState(EventState.PROCESSED);

@@ -13,8 +13,10 @@ public class AbstractRepository<T extends Entity> {
     private Long maxId = 0L;
 
     public T save(T entity) {
-        maxId++;
-        entity.setId(maxId);
+        if (entity.getId() == 0) {
+            maxId++;
+            entity.setId(maxId);
+        }
         storage.put(entity.getId(), entity);
         return entity;
     }

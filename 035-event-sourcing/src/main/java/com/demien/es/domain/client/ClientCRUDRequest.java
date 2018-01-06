@@ -1,17 +1,17 @@
 package com.demien.es.domain.client;
 
-public class ClientVO {
+public class ClientCRUDRequest {
     private final long id;
     private final String name;
     private final String contactInfo;
 
-    public ClientVO(long id, String name, String contactInfo) {
+    public ClientCRUDRequest(long id, String name, String contactInfo) {
         this.id = id;
         this.name = name;
         this.contactInfo = contactInfo;
     }
 
-    public ClientVO(String name, String contactInfo) {
+    public ClientCRUDRequest(String name, String contactInfo) {
         this(-1, name, contactInfo);
     }
 
@@ -29,7 +29,7 @@ public class ClientVO {
 
     @Override
     public String toString() {
-        return "ClientVO{" +
+        return "ClientCRUDRequest{" +
                 "name='" + name + '\'' +
                 ", contactInfo='" + contactInfo + '\'' +
                 '}';

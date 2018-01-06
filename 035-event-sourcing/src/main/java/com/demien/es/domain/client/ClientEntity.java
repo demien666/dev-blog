@@ -12,7 +12,7 @@ public class ClientEntity extends Entity {
     private Date createdDate = new Date();
     private ClientState state = ClientState.PENDING;
 
-    public ClientEntity(ClientVO vo) {
+    public ClientEntity(ClientCRUDRequest vo) {
         this.name = vo.getName();
         this.contactInfo = vo.getContactInfo();
     }
@@ -58,7 +58,7 @@ public class ClientEntity extends Entity {
         this.contactInfo = contactInfo;
     }
 
-    public void update(ClientVO payload) {
+    public void update(ClientCRUDRequest payload) {
         this.name = payload.getName();
         this.contactInfo = payload.getContactInfo();
     }

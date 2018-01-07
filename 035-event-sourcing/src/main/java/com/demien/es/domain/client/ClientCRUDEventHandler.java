@@ -1,50 +1,36 @@
 package com.demien.es.domain.client;
 
 import com.demien.es.system.EventHandler;
-import com.demien.es.system.event.EventState;
+import com.demien.es.system.SpringContext;
 import com.demien.es.system.event.EventType;
 
 public class ClientCRUDEventHandler implements EventHandler<ClientCRUDEvent> {
 
-    private final ClientRepository clientRepository;
-
-    public ClientCRUDEventHandler(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
+    private ClientFinder getClientFinder() {
+        return (ClientFinder) SpringContext.getBean(ClientFinder.class);
     }
 
 
     @Override
     public void processEvent(ClientCRUDEvent event) {
-        if (event.getType() == EventType.CREATE) {
-            processCreate(event);
-            return;
-        }
+        try {
+            if (event.getType() == EventType.CREATE) {
+                ClientEntity client = new ClientEntity(event.getRequest());
+                event.processed(client);
+                return;
+            }
 
-        if (event.getType() == EventType.UPDATE) {
-            processUpdate(event);
-            return;
+            if (event.getType() == EventType.UPDATE) {
+                ClientEntity client = getClientFinder().findEntityById(event.getRequest().getId()).get(0);
+                client.update(event.getRequest());
+                event.processed(client);
+                return;
+            }
+
+        } catch (Exception ex) {
+            event.failed(ex.getMessage());
         }
 
     }
 
-    private void processUpdate(ClientCRUDEvent event) {
-        ClientEntity entity = clientRepository.findById(event.getRequest().getId());
-        if (entity.getState() != ClientState.APPROVED) {
-            event.setErrorMessage("Client is in a wrong state! State should be APPROVED instead of " + entity.getState());
-            event.setState(EventState.FILED);
-            return;
-        }
-
-        entity.update(event.getRequest());
-        clientRepository.save(entity);
-        event.setResponse(entity);
-        event.setState(EventState.PROCESSED);
-    }
-
-    private void processCreate(ClientCRUDEvent event) {
-        ClientEntity entity = new ClientEntity(event.getRequest());
-        clientRepository.save(entity);
-        event.setResponse(entity);
-        event.setState(EventState.PROCESSED);
-    }
 }

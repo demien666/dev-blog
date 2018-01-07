@@ -52,4 +52,16 @@ public abstract class Event<REQ, RESP> {
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
+
+    public void processed(RESP response) {
+        this.setState(EventState.PROCESSED);
+        this.setResponse(response);
+
+    }
+
+    public void failed(String message) {
+        this.setState(EventState.FILED);
+        this.setErrorMessage(message);
+    }
+
 }

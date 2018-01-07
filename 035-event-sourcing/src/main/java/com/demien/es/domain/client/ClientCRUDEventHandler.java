@@ -16,19 +16,19 @@ public class ClientCRUDEventHandler implements EventHandler<ClientCRUDEvent> {
         try {
             if (event.getType() == EventType.CREATE) {
                 ClientEntity client = new ClientEntity(event.getRequest());
-                event.processed(client);
+                event.markAsProcessed(client);
                 return;
             }
 
             if (event.getType() == EventType.UPDATE) {
                 ClientEntity client = getClientFinder().findEntityById(event.getRequest().getId()).get(0);
                 client.update(event.getRequest());
-                event.processed(client);
+                event.markAsProcessed(client);
                 return;
             }
 
         } catch (Exception ex) {
-            event.failed(ex.getMessage());
+            event.markAsFailed(ex.getMessage());
         }
 
     }

@@ -6,25 +6,17 @@ import java.util.Date;
 
 public class ClientEntity extends Entity {
 
-    private long id;
     private String name;
     private String contactInfo;
     private Date createdDate = new Date();
     private ClientState state = ClientState.PENDING;
 
     public ClientEntity(ClientCRUDRequest vo) {
+        super();
         this.name = vo.getName();
         this.contactInfo = vo.getContactInfo();
     }
 
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public Date getCreatedDate() {
         return createdDate;
@@ -73,7 +65,7 @@ public class ClientEntity extends Entity {
     @Override
     public String toString() {
         return "ClientEntity{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", name='" + name + '\'' +
                 ", contactInfo='" + contactInfo + '\'' +
                 ", createdDate=" + createdDate +

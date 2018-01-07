@@ -10,9 +10,9 @@ public class LoanCreateEventHandler implements EventHandler<LoanCreateEvent> {
         LoanCreateRequest req = event.getRequest();
         try {
             LoanEntity loanEntity = new LoanEntity(req);
-            event.processed(loanEntity);
+            event.markAsProcessed(loanEntity);
         } catch (Exception e) {
-            event.failed(e.getMessage());
+            event.markAsFailed(e.getMessage());
         }
 
 

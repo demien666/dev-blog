@@ -3,7 +3,7 @@ package com.demien.es.domain;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class Entity {
-    private static AtomicLong idCounter = new AtomicLong(0);
+    private static AtomicLong idCounter = new AtomicLong(1);
     private long id;
 
     public long getId() {

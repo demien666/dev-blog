@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 public class EventBus {
 
     private List<Event> events = new LinkedList<>();
-    private Map<String, Event> index = new HashMap<>();
+    private Map<String, Event> guidIndex = new HashMap<>();
 
     private Map<Class<?>, EventHandler> handlers = new HashMap<>();
 
@@ -40,13 +40,13 @@ public class EventBus {
             return null;
         });
 
-        index.put(GUID, event);
+        guidIndex.put(GUID, event);
 
         return GUID;
     }
 
     public Event getEventByGUID(String guid) {
-        return index.get(guid);
+        return guidIndex.get(guid);
     }
 
 }

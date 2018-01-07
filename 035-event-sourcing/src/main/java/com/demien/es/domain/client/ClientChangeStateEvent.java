@@ -5,7 +5,7 @@ import com.demien.es.system.event.EventType;
 
 public class ClientChangeStateEvent extends Event<ClientChangeStateRequest, ClientEntity> {
 
-    public ClientChangeStateEvent(EventType type, ClientChangeStateRequest request) {
-        super(type, request);
+    public ClientChangeStateEvent(ClientChangeStateRequest request) {
+        super(request.getState() == ClientState.APPROVED ? EventType.APPROVE : EventType.REJECT, request);
     }
 }

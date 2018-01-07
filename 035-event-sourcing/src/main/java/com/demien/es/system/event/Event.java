@@ -53,13 +53,13 @@ public abstract class Event<REQ, RESP> {
         this.errorMessage = errorMessage;
     }
 
-    public void processed(RESP response) {
+    public void markAsProcessed(RESP response) {
         this.setState(EventState.PROCESSED);
         this.setResponse(response);
 
     }
 
-    public void failed(String message) {
+    public void markAsFailed(String message) {
         this.setState(EventState.FILED);
         this.setErrorMessage(message);
     }

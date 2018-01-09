@@ -18,17 +18,18 @@ public abstract class EntityFinder<T extends Entity> {
 
     public List<T> getAll() {
         return eventBus.getEvents().stream()
+                .filter(event -> event.getResponse() != null)
                 .filter(event -> event.getResponse().getClass().equals(cl))
                 .map(event -> (T) event.getResponse())
                 .collect(Collectors.toList());
     }
 
-    public List<T> findEntityById(long id) {
-        return eventBus.getEvents().stream()
-                .filter(event -> event.getResponse().getClass().equals(cl))
-                .map(event -> (T) event.getResponse())
-                .filter(resp -> resp.getId() == id)
-                .collect(Collectors.toList());
+    public List<T> findEntitiesById(long id) {
+        return getAll().stream().filter(ent -> ent.getId() == id).collect(Collectors.toList());
+    }
 
+    public T findEntityById(long id) {
+        List<T> list = findEntitiesById(id);
+        return (list.size() > 0) ? list.get(list.size() - 1) : null;
     }
 }

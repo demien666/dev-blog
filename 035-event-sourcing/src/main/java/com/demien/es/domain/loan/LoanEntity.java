@@ -27,7 +27,7 @@ public class LoanEntity extends Entity {
         LoanEntity loanEntity = new LoanEntity(req);
         loanEntity.setAmount(new BigDecimal(req.getAmount()));
         ClientFinder clientFinder = (ClientFinder) SpringContext.getBean(ClientFinder.class);
-        ClientEntity client = clientFinder.findEntityById(Long.parseLong(req.getClientId())).get(0);
+        ClientEntity client = clientFinder.findEntityById(Long.parseLong(req.getClientId()));
         if (client == null) {
             exception("Not able to find the client with id:" + req.getClientId());
         }

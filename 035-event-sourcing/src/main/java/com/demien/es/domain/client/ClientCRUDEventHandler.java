@@ -21,7 +21,7 @@ public class ClientCRUDEventHandler implements EventHandler<ClientCRUDEvent> {
             }
 
             if (event.getType() == EventType.UPDATE) {
-                ClientEntity client = getClientFinder().findEntityById(event.getRequest().getId()).get(0);
+                ClientEntity client = getClientFinder().findEntityById(event.getRequest().getId());
                 client.update(event.getRequest());
                 event.markAsProcessed(client);
                 return;

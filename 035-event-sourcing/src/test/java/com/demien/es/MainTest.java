@@ -9,7 +9,6 @@ import com.demien.es.system.SpringContext;
 import com.demien.es.system.event.Event;
 import com.demien.es.system.event.EventState;
 import com.demien.es.system.event.EventType;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -50,7 +49,6 @@ public class MainTest {
     public Event createClient(String name, String contactInfo) {
         return sendEvent(new ClientCRUDEvent(EventType.CREATE, new ClientCRUDRequest(name, contactInfo)));
     }
-
 
     public Event updateClient(long id, String name, String contactInfo) {
         return sendEvent(new ClientCRUDEvent(EventType.UPDATE, new ClientCRUDRequest(id, name, contactInfo)));
@@ -101,41 +99,5 @@ public class MainTest {
         assertTrue(client.getName().equals("new name"));
     }
 
-    //Test
-    public void test() {
-
-        String guid = eventBus.dispatchEvent(new ClientCRUDEvent(EventType.CREATE, new ClientCRUDRequest("Joe", "NY")));
-        pause();
-        Assert.assertTrue(clientFinder.getAll().size() == 1);
-
-        /*
-        ClientEntity clientEntity = (ClientEntity) eventBus.getEventByGUID(guid).getResponse();
-        System.out.println(clientEntity);
-
-
-        guid = eventBus.dispatchEvent(new ClientCRUDEvent(EventType.UPDATE, new ClientCRUDRequest(clientEntity.getId(), "Joe", "HOUSTON")));
-        pause();
-        Event event = eventBus.getEventByGUID(guid);
-        System.out.println(event.getErrorMessage());
-
-        guid = eventBus.dispatchEvent(new ClientChangeStateEvent(EventType.APPROVE, new ClientChangeStateRequest(clientEntity.getId(), -1, ClientState.APPROVED)));
-        pause();
-        System.out.println(clientEntity);
-
-        guid = eventBus.dispatchEvent(new ClientCRUDEvent(EventType.UPDATE, new ClientCRUDRequest(clientEntity.getId(), "Joe", "HOUSTON")));
-        pause();
-        event = eventBus.getEventByGUID(guid);
-        System.out.println(event.getState());
-
-        System.out.println(clientEntity);
-
-
-        guid = eventBus.dispatchEvent(new LoanCreateEvent(new LoanCreateRequest("", "100", "01.01.2017", "31.01.2017")));
-        pause();
-        event = eventBus.getEventByGUID(guid);
-        System.out.println(event.getResponse());
-        */
-
-    }
 
 }

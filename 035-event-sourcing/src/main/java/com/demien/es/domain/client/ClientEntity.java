@@ -1,6 +1,6 @@
 package com.demien.es.domain.client;
 
-import com.demien.es.domain.Entity;
+import com.demien.es.system.Entity;
 
 import java.util.Date;
 
@@ -50,14 +50,14 @@ public class ClientEntity extends Entity {
         this.contactInfo = contactInfo;
     }
 
-    public void update(ClientCRUDRequest payload) throws Exception {
+    public void handleUpdate(ClientCRUDRequest payload) throws Exception {
         if (this.getState() != ClientState.APPROVED)
             exception("Client should be in APPROVED state, instead of " + this.getState());
         this.name = payload.getName();
         this.contactInfo = payload.getContactInfo();
     }
 
-    public void processStateChange(ClientState newState) throws Exception {
+    public void handleStateChange(ClientState newState) throws Exception {
         if (newState == this.getState()) exception("Already in this state ");
         this.setState(newState);
     }

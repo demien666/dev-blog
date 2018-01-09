@@ -1,4 +1,4 @@
-package com.demien.es.domain;
+package com.demien.es.system;
 
 import java.util.concurrent.atomic.AtomicLong;
 

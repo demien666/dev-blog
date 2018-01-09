@@ -15,9 +15,9 @@ public class ClientChangeStateEventHandler implements EventHandler<ClientChangeS
 
         try {
             ClientEntity client = getClientFinder().findEntityById(event.getRequest().getClientId());
-            client.processStateChange(event.getRequest().getState());
+            client.handleStateChange(event.getRequest().getState());
         } catch (Exception e) {
-            event.markAsFailed(e.getMessage());
+            event.markAsFailed(e);
         }
 
     }

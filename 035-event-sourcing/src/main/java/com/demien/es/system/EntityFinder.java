@@ -1,7 +1,5 @@
 package com.demien.es.system;
 
-import com.demien.es.domain.Entity;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

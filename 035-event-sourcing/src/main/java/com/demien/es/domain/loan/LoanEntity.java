@@ -1,9 +1,9 @@
 package com.demien.es.domain.loan;
 
-import com.demien.es.domain.Entity;
 import com.demien.es.domain.client.ClientEntity;
 import com.demien.es.domain.client.ClientFinder;
 import com.demien.es.domain.client.ClientState;
+import com.demien.es.system.Entity;
 import com.demien.es.system.SpringContext;
 
 import java.math.BigDecimal;
@@ -22,22 +22,21 @@ public class LoanEntity extends Entity {
     private final static SimpleDateFormat formatter = new SimpleDateFormat("dd.mm.yyyy");
 
     public LoanEntity(LoanCreateRequest req) throws Exception {
-        Date d1 = formatter.parse(req.getStartDate());
-        Date d2 = formatter.parse(req.getEndDate());
-        LoanEntity loanEntity = new LoanEntity(req);
-        loanEntity.setAmount(new BigDecimal(req.getAmount()));
+        Date startDate = formatter.parse(req.getStartDate());
+        Date endDate = formatter.parse(req.getEndDate());
+        this.setAmount(new BigDecimal(req.getAmount()));
         ClientFinder clientFinder = (ClientFinder) SpringContext.getBean(ClientFinder.class);
         ClientEntity client = clientFinder.findEntityById(Long.parseLong(req.getClientId()));
         if (client == null) {
             exception("Not able to find the client with id:" + req.getClientId());
         }
         if (client.getState() != ClientState.APPROVED) {
-            exception("Client state should be APPROVED! Instea of:" + client.getState());
+            exception("Client state should be APPROVED! Instead of:" + client.getState());
         }
 
-        loanEntity.setClient(client);
-        loanEntity.setStartDate(d1);
-        loanEntity.setEndDate(d2);
+        this.setClient(client);
+        this.setStartDate(startDate);
+        this.setEndDate(endDate);
     }
 
     public ClientEntity getClient() {

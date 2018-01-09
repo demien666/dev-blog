@@ -1,9 +1,7 @@
 package com.demien.es;
 
 import com.demien.es.domain.client.*;
-import com.demien.es.domain.loan.LoanCreateEvent;
-import com.demien.es.domain.loan.LoanCreateEventHandler;
-import com.demien.es.domain.loan.LoanFinder;
+import com.demien.es.domain.loan.*;
 import com.demien.es.system.EventBus;
 import com.demien.es.system.SpringContext;
 import com.demien.es.system.event.Event;
@@ -58,6 +56,10 @@ public class MainTest {
         return sendEvent(new ClientChangeStateEvent(new ClientChangeStateRequest(clientId, state)));
     }
 
+    public Event createLoan(String clientId, String amount, String startDate, String endDate) {
+        return sendEvent(new LoanCreateEvent(new LoanCreateRequest(clientId, amount, startDate, endDate)));
+    }
+
 
     @Test
     public void itShouldCreateClient() {
@@ -77,7 +79,7 @@ public class MainTest {
         Event event = createClient("Pending", "PE");
         ClientEntity client = (ClientEntity) event.getResponse();
         event = updateClient(client.getId(), "new name", "new info");
-        assertTrue(event.getState() == EventState.FILED);
+        assertTrue(event.getState() == EventState.FAILED);
     }
 
     @Test
@@ -97,6 +99,24 @@ public class MainTest {
         event = updateClient(client.getId(), "new name", "new info");
         assertTrue(event.getState() == EventState.PROCESSED);
         assertTrue(client.getName().equals("new name"));
+    }
+
+    @Test
+    public void itShouldFailOnLoanCreationWithBadClient() {
+        Event event = createLoan("-1", "100.1", "01.01.2018", "31.12.2018");
+        assertTrue(event.getState() == EventState.FAILED);
+        assertTrue(event.getErrorMessage().contains("Not able to find the client"));
+    }
+
+    @Test
+    public void itShouldSucceedOnLoanCreationWithGoodClient() {
+        Event event = createClient("LoanClient", "L.A.");
+        ClientEntity client = (ClientEntity) event.getResponse();
+        updateClientState(client.getId(), ClientState.APPROVED);
+        event = createLoan(Long.toString(client.getId()), "100.1", "01.01.2018", "31.12.2018");
+        assertTrue(event.getState() == EventState.PROCESSED);
+        LoanEntity loan = (LoanEntity) event.getResponse();
+        assertTrue(loan.getId() > 0);
     }
 
 

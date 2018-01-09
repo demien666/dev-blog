@@ -22,13 +22,12 @@ public class ClientCRUDEventHandler implements EventHandler<ClientCRUDEvent> {
 
             if (event.getType() == EventType.UPDATE) {
                 ClientEntity client = getClientFinder().findEntityById(event.getRequest().getId());
-                client.update(event.getRequest());
+                client.handleUpdate(event.getRequest());
                 event.markAsProcessed(client);
                 return;
             }
-
-        } catch (Exception ex) {
-            event.markAsFailed(ex.getMessage());
+        } catch (Exception e) {
+            event.markAsFailed(e);
         }
 
     }

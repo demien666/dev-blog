@@ -6,7 +6,7 @@ public abstract class Event<REQ, RESP> {
     private final EventType type;
     private final REQ request;
     private RESP response;
-    private String errorMessage;
+    private Throwable processingError;
 
     public Event(EventType type, REQ request) {
         this.type = type;
@@ -45,23 +45,22 @@ public abstract class Event<REQ, RESP> {
         return type;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public Throwable getProcessingError() {
+        return processingError;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public String getErrorMessage() {
+        return this.processingError.getMessage();
     }
 
     public void markAsProcessed(RESP response) {
         this.setState(EventState.PROCESSED);
         this.setResponse(response);
-
     }
 
-    public void markAsFailed(String message) {
-        this.setState(EventState.FILED);
-        this.setErrorMessage(message);
+    public void markAsFailed(Throwable processingError) {
+        this.setState(EventState.FAILED);
+        this.processingError = processingError;
     }
 
 }

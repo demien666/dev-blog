@@ -1,10 +1,10 @@
-package com.demien
+package com.demien.sparktest.batch
 
 // https://spark.apache.org/docs/latest/sql-programming-guide.html
 
 import org.apache.spark.sql.SparkSession
 
-object DataFrameFromFile extends App {
+object DataFrameExample extends App {
 
   val spark = SparkSession
     .builder()
@@ -22,7 +22,7 @@ object DataFrameFromFile extends App {
   val sqlDF = spark.sql("SELECT * FROM people where email like '%net%' ")
   sqlDF.show()
 
-  case class Person(name: String, email: String, city: String, mac: String, timestamp: String, creditcard: String)
+  case class Person(name: String, email: String="empty", city: String, mac: String, timestamp: String, creditcard: String)
 
   val peopleDS = spark.read.json("src/main/resources/people.json").as[Person]
   val filteredDS = peopleDS.filter(p => p.email != null && p.email.contains("net"))

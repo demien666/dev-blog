@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorRef, Props}
 
 case class StartProcessFileMsg()
 
-class WordCounterActor(filename: String) extends Actor {
+class FileLetterCounterActor(filename: String) extends Actor {
 
   private var running = false
   private var totalLines = 0

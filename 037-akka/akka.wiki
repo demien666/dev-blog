@@ -1,0 +1,160 @@
+
+Akka (toolkit)
+From Wikipedia, the free encyclopedia
+This article is about the software library for application development. For other uses, see Akka.
+Akka
+Akka toolkit logo.svg
+Original author(s)	Jonas Bonér
+Developer(s)	Lightbend
+Initial release	July 2009
+Stable release
+2.5.9[1] / January 11, 2018[2]
+Repository
+https://github.com/akka/akka
+Edit this at Wikidata
+Development status	Active
+Written in	Scala
+Operating system	Cross-platform
+Platform	Java Virtual Machine
+License	Apache License 2.0
+Website	akka.io
+Akka is a free and open-source toolkit and runtime simplifying the construction of concurrent and distributed applications on the JVM. Akka supports multiple programming models for concurrency, but it emphasizes actor-based concurrency, with inspiration drawn from Erlang.[citation needed]
+
+Language bindings exist for both Java and Scala. Akka is written in Scala and, as of Scala 2.10, Akka's actor implementation is included as part of the Scala standard library.[3]
+
+Contents
+1	History
+2	Distinguishing Features
+3	Project Structure
+4	Relation to other Libraries
+5	Publications about Akka
+6	See also
+7	References
+8	External links
+History
+An actor implementation, written by Philipp Haller, was released in July 2006 as part of Scala 2.1.7.[4] By 2008 Scala was attracting attention for use in complex server applications, but concurrency was still typically achieved by creating threads that shared memory and synchronized when necessary using locks. Aware of the difficulties with that approach and inspired by the Erlang programming language's library support for writing highly concurrent, event-driven applications, Jonas Bonér created Akka to bring similar capabilities to Scala and Java. Bonér began working on Akka in early 2009[5] and wrote up his vision for it in June of that year.[6] The first public release was Akka 0.5,[7] announced in January 2010.[8] Akka is now part of the Lightbend Platform together with the Play framework and the Scala programming language.
+
+Distinguishing Features
+The key points distinguishing applications based on Akka actors are:
+
+Concurrency is message-based and asynchronous: typically no mutable data are shared and no synchronization primitives are used; Akka implements the actor model.
+The way actors interact is the same whether they are on the same host or separate hosts, communicating directly or through routing facilities, running on a few threads or many threads, etc. Such details may be altered at deployment time through a configuration mechanism, allowing a program to be scaled up (to make use of more powerful servers) and out (to make use of more servers) without modification.
+Actors are arranged hierarchically with regard to program failures, which are treated as events to be handled by an actor's supervisor (regardless of which actor sent the message triggering the failure). In contrast to Erlang, Akka enforces parental supervision, which means that each actor is created and supervised by its parent actor.
+Akka has a modular structure, with a core module providing actors. Other modules are available to add features such as network distribution of actors, cluster support, Command and Event Sourcing, integration with various third-party systems (e.g. Apache Camel, ZeroMQ), and even support for other concurrency models such as Futures and Agents.
+
+Project Structure
+Viktor Klang became the technical lead for the Akka project in September 2011. When Viktor became Director of Engineering at Lightbend in December 2012, Roland Kuhn became the technical lead for Akka. The main part of the development is done by a core team employed at Lightbend,[9] supported by an active community.[10] The current emphasis is on extending cluster support.
+
+Relation to other Libraries
+Other frameworks and toolkits have emerged to form an ecosystem around Akka:
+
+The Spray toolkit[11] is implemented using Akka and features a HTTP server as well as related facilities, such as a DSL for creating RESTful APIs
+The Play framework for developing web applications offers integration with Akka[12]
+Apache Spark is built upon Akka[13]
+The Socko Web Server library supports the implementation of REST APIs for Akka applications[14]
+The eventsourced[15] library provides Event-driven architecture (see also domain-driven design) support for Akka actors
+The Gatling stress test tool for load-testing web servers is built upon Akka[16]
+The Scalatra web framework is built upon Akka and offers integration with it[17]
+The Vaadin web app development framework can integrate with Akka[18]
+The Apache Flink platform for distributed stream and batch data processing is built upon Akka.[19]
+Akka actors are considered an integral part of the Scala standard library.[20] There are more than 250 public projects registered on GitHub which use Akka.[21]
+
+Publications about Akka
+There are several books about Akka:
+
+Akka Essentials[22]
+Akka Code Examples
+Akka Concurrency[23]
+Akka in Action[24]
+Effective Akka[25]
+Composable Futures with Akka 2.0, Featuring Java, Scala and Akka Code Examples[26]
+Akka also features in
+
+P. Haller's "Actors in Scala"[27]
+N. Raychaudhuri's "Scala in Action"[28]
+D. Wampler's "Functional Programming for Java Developers"[29]
+A. Alexander's "Scala Cookbook"[30]
+V. Subramaniam's "Programming Concurrency on the JVM"[31]
+M. Bernhardt's "Reactive Web Applications"[32]
+Besides many web articles describe the commercial use of Akka[33][34] there are also overview articles about it.[35][36]
+
+See also
+Free and open-source software logo (2009).svg Free software portal
+References
+ "Try Akka Akka". Retrieved 2018-01-11.
+ Akka Team. "Akka 2.5.9 Released and 2.4.x End-Of-Life". Retrieved 2018-01-11.
+ Jovanovic, Vojin. "The Scala Actors Migration Guide". Retrieved 13 March 2013.
+ "Scala Version History - Older versions". scala-lang.org. 2009-02-16. Archived from the original on 2013-01-04.
+ Jonas Bonér (2009-02-16). "init project setup". github.com.
+ Bonér, Jonas. "Akka Actor Kernel". scala-language@googlegroups.com. Archived from the original on 2016-03-04. Retrieved 2017-07-13.
+ Jonas Bonér (2009-07-12). "v0.5". github.com.
+ Jonas Bonér (2010-01-04). "Introducing Akka - Simpler Scalability, Fault-Tolerance, Concurrency & Remoting through Actors". jonasboner.com.
+ "Akka team". akka.io. Retrieved 6 June 2013.
+ "Akka contributors list". github.com. Retrieved 6 June 2013.
+ Doenitz, Mathias. "Spray toolkit". spray.io. Retrieved 6 June 2013.
+ "Play framework documentation: Integrating with Akka". playframework.com. Retrieved 6 June 2013.
+ "Spark project sources". github.com. Retrieved 6 June 2013.
+ "Socko Web Server". sockoweb.org. Retrieved 6 June 2013.
+ "eventsourced library". eligosource. Retrieved 6 June 2013.
+ "Gatling stress test tool". github.com. Retrieved 6 June 2013.
+ "Scalatra documentation: Akka". scalatra.org. Retrieved 6 June 2013.
+ "Vaadin in Akka". Vaadin.com. Retrieved 26 April 2014.
+ "Apache Flink - Akka for the win !". flink.apache.org. Retrieved 2 December 2015.
+ Fulton, Scott M. "The Middleware Connection: Scala, Akka, and Heroku". readwrite.com. Retrieved 6 June 2013.
+ Tasharofi, Samira. "Akka actor project corpus at GitHub". cs.illinois.edu.
+ Gupta, Munish K. (2012). Akka Essentials. Packt Publishing. p. 334. ISBN 1849518289.
+ Wyatt, Derek (2013). Akka Concurrency. Artima. p. 521. ISBN 0981531660.
+ Roestenburg, Raymond (2013). Akka in Action. Manning Publications. p. 475. ISBN 1617291013.
+ Allen, Jamie (2013). Effective Akka. O'Reilly Media. p. 74. ISBN 1449360076.
+ Slinn, Michael (2012). Composable Futures with Akka 2.0. Micronautics Research. p. 178. ISBN 0984278923.
+ Haller, Philipp (2012). Actors in Scala. Artima. p. 169. ISBN 0981531652.
+ Raychaudhuri, Nilanjan (2013). Scala in Action. Manning Publications. p. 416. ISBN 1935182757.
+ Wampler, Dean (2011). Functional Programming for Java Developers. O'Reilly Media. p. 90. ISBN 1449311032.
+ Alexander, Alvin (2013). Scala Cookbook. O'Reilly Media. p. 722. ISBN 1449339611.
+ Subramaniam, Venkat (2011). Programming Concurrency on the JVM: Mastering Synchronization, STM, and Actors. Pragmatic Bookshelf. p. 280. ISBN 193435676X.
+ Bernhardt, Manuel (2016). Reactive Web Applications: Covers Play, Akka and Reactive Streams. Manning Publications. p. 328. ISBN 9781633430099.
+ Darrow, Barb. "Juniper networks signs on with Scala". gigaom.com. Retrieved 8 June 2013.
+ Ross, David. "Scaling the Klout API with Scala, Akka and Play". Retrieved 8 June 2013.
+ Haines, Stephen. "Open source Java projects: Akka". javaworld.com. Retrieved 8 June 2013.
+ "Java Magazin 6.13". jaxenter.de. Archived from the original on 13 August 2013. Retrieved 8 June 2013.
+External links
+Official website for Akka
+Categories: Java platformFree software programmed in ScalaSoftware development kitsJava development tools
+Navigation menu
+Not logged inTalkContributionsCreate accountLog inArticleTalkReadEditView historySearch
+
+Search Wikipedia
+Main page
+Contents
+Featured content
+Current events
+Random article
+Donate to Wikipedia
+Wikipedia store
+Interaction
+Help
+About Wikipedia
+Community portal
+Recent changes
+Contact page
+Tools
+What links here
+Related changes
+Upload file
+Special pages
+Permanent link
+Page information
+Wikidata item
+Cite this page
+Print/export
+Create a book
+Download as PDF
+Printable version
+
+Languages
+한국어
+中文
+Edit links
+This page was last edited on 12 January 2018, at 10:28.
+Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply. By using this site, you agree to the Terms of Use and Privacy Policy. Wikipedia® is a registered trademark of the Wikimedia Foundation, Inc., a non-profit organization.
+Privacy policyAbout WikipediaDisclaimersContact WikipediaDevelopersCookie statementMobile viewWikimedia Foundation Powered by MediaWiki

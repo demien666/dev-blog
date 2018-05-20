@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorRef, Props}
 
 case class StartProcessFileMsg()
 
-class FileLetterCounterActor(filename: String) extends Actor {
+class FileWordCounterActor(filename: String) extends Actor {
 
   private var totalLines = 0
   private var linesProcessed = 0
@@ -16,13 +16,13 @@ class FileLetterCounterActor(filename: String) extends Actor {
       fileSender = sender
       import scala.io.Source._
       fromFile(filename).getLines.foreach { line =>
-        val stringCounterActor = context.actorOf(Props[StringCounterActor])
-        stringCounterActor.tell(ProcessStringMsg(line), self)
+        val lineWordCounterActor = context.actorOf(Props[LineWordCounterActor])
+        lineWordCounterActor.tell(CountWordsInLineMsg(line), self)
         totalLines += 1
       }
 
     }
-    case StringProcessedMsg(wordsCount) => {
+    case WordsInLineResultMsg(wordsCount) => {
       result += wordsCount
       linesProcessed += 1
       if (linesProcessed == totalLines) {

@@ -9,7 +9,7 @@ import akka.dispatch.ExecutionContexts.global
 object AkkaApp extends App {
 
   val system = ActorSystem("System")
-  val wcActor = system.actorOf(Props(new FileLetterCounterActor(args(0))))
+  val wcActor = system.actorOf(Props(new FileWordCounterActor(args(0))))
   val wcActorAskWithTimeout = wcActor.ask(_: Any)(Timeout(10 seconds))
 
   val askingFuture = wcActorAskWithTimeout(StartProcessFileMsg())

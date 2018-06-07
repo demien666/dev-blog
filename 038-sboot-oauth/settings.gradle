@@ -1,3 +1,5 @@
 rootProject.name = 'oauthdemo'
 include 'oauthserver'
+include 'service'
+include 'client'
 

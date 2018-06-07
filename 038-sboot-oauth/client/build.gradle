@@ -1,6 +1,5 @@
-group = 'com.demien.sboot'
-version = '0.0.1-SNAPSHOT'
-
+group 'com.demien.sboot'
+version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'

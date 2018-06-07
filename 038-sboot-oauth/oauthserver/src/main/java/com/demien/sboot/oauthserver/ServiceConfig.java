@@ -10,6 +10,6 @@ public class ServiceConfig extends GlobalAuthenticationConfigurerAdapter {
     public void init(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("huan").password("{noop}sebastyan").roles("USER") .and()
-                .withUser("ariel").password("{noop}ortega").roles("USER", "OPERATOR");
+                .withUser("joe").password("{noop}black").roles("USER", "ADMIN");
     }
 }

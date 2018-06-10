@@ -31,7 +31,7 @@ public class ServiceApp {
     }
 
     @RequestMapping("/mydata")
-    @PreAuthorize("#oauth2.hasScope('data_read') and hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("#oauth2.hasScope('data_select') and hasAuthority('ROLE_ADMIN')")
     public ArrayList<MyData> getTollData() {
 
         ArrayList<MyData> result = new ArrayList<MyData>();

@@ -22,8 +22,8 @@ public class ClientController extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2ClientContext clientContext;
 
-    @Autowired
-    private OAuth2RestTemplate oauth2RestTemplate;
+    //@Autowired
+    //private OAuth2RestTemplate oauth2RestTemplate;
 
     @RequestMapping("/")
     public String loadHome() {
@@ -40,13 +40,14 @@ public class ClientController extends WebSecurityConfigurerAdapter {
     public String callService() {
         OAuth2AccessToken token = clientContext.getAccessToken();
         System.out.println("Token:" + token);
-
+/*
         ResponseEntity<ArrayList<MyData>> response =
                 oauth2RestTemplate.exchange("http://localhost:9001/services/mydata", HttpMethod.GET, null, new ParameterizedTypeReference<ArrayList<MyData>>() {
                 });
 
         return response.getBody().toString();
-
+*/
+        return token.toString();
 
     }
 

@@ -1,0 +1,16 @@
+server:
+  port: 9090
+  servlet:
+    context-path: /services
+
+security:
+  oauth2:
+    client:
+      clientId: myClientId
+      clientSecret: myClientSecret
+      accessTokenUri: http://localhost:9000/services/oauth/token
+      userAuthorizationUri: http://localhost:9000/services/oauth/authorize
+      clientAuthenticationScheme: form
+    resource:
+      userInfoUri: http://localhost:9000/services/user
+      preferTokenInfo: false

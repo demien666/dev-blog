@@ -1,0 +1,11 @@
+insert into user_group(id, name, description) values(1001, 'ADM', 'Admin');
+insert into user_group(id, name, description) values(1002, 'DEV', 'Developers');
+insert into user_group(id, name, description) values(1003, 'FIN', 'Finance');
+insert into user_group(id, name, description) values(1004, 'OTH', 'Other');
+insert into user (id, group_id, name, salary) values (101, 1001, 'Joe', 100);
+insert into user (id, group_id, name, salary) values (102, 1002, 'Huan', 200);
+insert into user (id, group_id, name, salary) values (103, 1003, 'Michael', 300);
+insert into user (id, group_id, name, salary) values (104, 1001, 'Charles', 100);
+insert into user (id, group_id, name, salary) values (105, 1002, 'Mario', 200);
+insert into user (id, group_id, name, salary) values (106, 1004, 'Jan', 300);
+insert into user (id, group_id, name, salary) values (107, 1001, 'Victor', 500);

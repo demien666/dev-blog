@@ -1,0 +1,34 @@
+<html>
+
+<head>
+
+    <script>
+        function registerEventSourceAndAddResponseTo(uri, elementId) {
+            var stringEvents = document.getElementById(elementId);
+            var stringEventSource = new EventSource(uri);
+            stringEventSource.onmessage = function (e) {
+                var newElement = document.createElement("li");
+                newElement.innerHTML = e.data;
+                stringEvents.appendChild(newElement);
+            }
+        }
+
+        function subscribe() {
+            registerEventSourceAndAddResponseTo("http://localhost:8080/random","display");
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+    <p>
+        <button id="subscribe-button" onclick="subscribe()">Subscribe to random numbers</button>
+        <ul id="display"></ul>
+    </p>
+
+
+</body>
+
+</html>

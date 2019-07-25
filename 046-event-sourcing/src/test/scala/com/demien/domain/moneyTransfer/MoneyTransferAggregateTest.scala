@@ -1,6 +1,5 @@
 package com.demien.domain.moneyTransfer
 
-import com.demien.domain.account.AccountAggregate
 import com.demien.domain.moneyTransfer.MoneyTransferCommands.{MoneyTransferCreateCommand, MoneyTransferStateCompletedCommand, MoneyTransferStateCreditedCommand}
 import com.demien.domain.moneyTransfer.MoneyTransferEvents.{MoneyTransferCreatedEvent, MoneyTransferStateCompletedEvent, MoneyTransferStateCreditedEvent}
 import org.scalatest.FunSuite
@@ -32,13 +31,13 @@ class MoneyTransferAggregateTest extends FunSuite {
 
   test("testProcessCommand") {
 
-    val created = MoneyTransferAggregate.processCommand(transfer, MoneyTransferCreateCommand(details, transactionId) )
+    val created = MoneyTransferAggregate.processCommand(transfer, MoneyTransferCreateCommand(transactionId, details))
     assert( created === Seq(MoneyTransferCreatedEvent(details, transactionId)))
 
     val credited = MoneyTransferAggregate.processCommand(transfer, MoneyTransferStateCreditedCommand(transactionId) )
     assert( credited === Seq(MoneyTransferStateCreditedEvent(details, transactionId)))
 
-    val completed = MoneyTransferAggregate.processCommand(transfer, MoneyTransferStateCompletedCommand() )
+    val completed = MoneyTransferAggregate.processCommand(transfer, MoneyTransferStateCompletedCommand(transactionId))
     assert( completed === Seq(MoneyTransferStateCompletedEvent(details)))
 
   }

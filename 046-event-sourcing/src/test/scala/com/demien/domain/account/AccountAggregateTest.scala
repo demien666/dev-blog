@@ -17,15 +17,15 @@ class AccountAggregateTest extends FunSuite {
 
     checkCmdEvt(
       AccountAggregate.newInstance()
-      , CreateAccountCommand(AccountDetails("12345", "USD"), 10)
+      , CreateAccountCommand(-1, AccountDetails("12345", "USD"), 10)
       , AccountCreated(AccountDetails("12345", "USD"), 10)
     )
 
     val account = Account(AccountDetails("12345", "USD"), 10)
     val transId = Option(1)
-    checkCmdEvt(account, CreditAccountCommand(7, transId), AccountCreditPerformed(7, transId))
-    checkCmdEvt(account, CreditAccountCommand(11, transId), AccountCreditFailedInsufficientFunds(transId))
-    checkCmdEvt(account, DepositAccountCommand(3, transId), AccountDepositPerformed(3, transId))
+    checkCmdEvt(account, CreditAccountCommand(-1, 7, transId), AccountCreditPerformed(7, transId))
+    checkCmdEvt(account, CreditAccountCommand(-1, 11, transId), AccountCreditFailedInsufficientFunds(transId))
+    checkCmdEvt(account, DepositAccountCommand(-1, 3, transId), AccountDepositPerformed(3, transId))
 
   }
 

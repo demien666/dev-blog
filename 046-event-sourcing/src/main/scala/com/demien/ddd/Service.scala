@@ -22,15 +22,10 @@ class Service[T,E](eventStore: EventStore[E], aggregate: Aggregate[T,E], eventBu
     getEntityAndVersion(entityId)._1
   }
 
-  def process(entityId: Int, command: Command): Unit = {
-    val (entity, version) = this.getEntityAndVersion(entityId)
-    process(entityId, version, entity, command)
-  }
-
-  def process(entityId: Int, lastVersion: Int, entity: T, command: Command): Unit = {
+  def process(command: Command): Unit = {
+    val (entity, lastVersion) = this.getEntityAndVersion(command.aggregateId)
     val events = aggregate.processCommand(entity, command)
-
-    eventStore.saveEvents(entityId, lastVersion +1, events)
+    eventStore.saveEvents(command.aggregateId, lastVersion + 1, events)
     if (eventBus.nonEmpty) events.foreach(eventBus.get.dispatch(_))
   }
 

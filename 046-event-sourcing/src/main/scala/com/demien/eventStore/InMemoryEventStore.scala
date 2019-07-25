@@ -16,7 +16,7 @@ class InMemoryEventStore[T] extends EventStore[T] {
     (_old: VersionedEvents, _new: VersionedEvents) =>  _old ++ _new
 
   override def saveEvents(entityId: Int, lastVersion: Int, events: Seq[T]): Unit = {
-    events.foreach(e => println("StoringEvent:" + e))
+    events.foreach(e => println("entityId:" + entityId + " StoringEvent:" + e))
     val oldEvents = storage.get(entityId)
     if (oldEvents != null && oldEvents.last._2 > lastVersion) throw new StoreOptimisticLockingException
     var eachVersion = lastVersion

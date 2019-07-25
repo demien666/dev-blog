@@ -3,7 +3,7 @@ package com.demien.domain.moneyTransfer
 import com.demien.cqrs.Command
 import com.demien.ddd.{Aggregate, Event}
 import com.demien.domain.moneyTransfer.MoneyTransferCommands.{MoneyTransferCreateCommand, MoneyTransferStateCompletedCommand, MoneyTransferStateCreditedCommand, MoneyTransferStateFailedCommand}
-import com.demien.domain.moneyTransfer.MoneyTransferEvents.{MoneyTransferCreatedEvent, MoneyTransferEvent, MoneyTransferStateCompletedEvent, MoneyTransferStateCreditedEvent, MoneyTransferStateFailedEvent}
+import com.demien.domain.moneyTransfer.MoneyTransferEvents._
 import com.demien.domain.moneyTransfer.TransferState.TransferState
 
 object TransferState extends Enumeration {
@@ -11,10 +11,7 @@ object TransferState extends Enumeration {
   val CREATED, CREDITED, COMPLETED, FAILED = Value
 }
 
-// Value Object
 case class MoneyTransferDetails(val accountIdFrom: Int, val accountIdTo: Int, val amount: BigDecimal)
-
-// Entity
 case class MoneyTransfer(val moneyTransferDetails: MoneyTransferDetails, val state: TransferState = TransferState.CREATED)
 
 // Aggregate
@@ -39,16 +36,16 @@ object MoneyTransferAggregate extends Aggregate[MoneyTransfer,Event] {
 
   override def processCommand(aggregate: MoneyTransfer, command: Command): Seq[MoneyTransferEvent] =
     command match {
-      case MoneyTransferCreateCommand(moneyTransferDetails, moneyTransferId)
+      case MoneyTransferCreateCommand(moneyTransferId, moneyTransferDetails)
         => Seq( MoneyTransferCreatedEvent(moneyTransferDetails, moneyTransferId))
 
       case MoneyTransferStateCreditedCommand(moneyTransferId)
         => Seq(MoneyTransferStateCreditedEvent(aggregate.moneyTransferDetails, moneyTransferId))
 
-      case MoneyTransferStateCompletedCommand()
+      case MoneyTransferStateCompletedCommand(_)
       => Seq(MoneyTransferStateCompletedEvent(aggregate.moneyTransferDetails))
 
-      case MoneyTransferStateFailedCommand()
+      case MoneyTransferStateFailedCommand(_)
       => Seq(MoneyTransferStateFailedEvent(aggregate.moneyTransferDetails))
 
       case _ => unknownCommand(command)

@@ -1,5 +1,3 @@
 package com.demien.cqrs
 
-trait Command {
-
-}
+class Command(val aggregateId: Int)

@@ -2,8 +2,8 @@ package com.demien.domain.account
 
 import com.demien.cqrs.Command
 import com.demien.ddd.{Aggregate, Event}
-import com.demien.domain.account.AccountCommands.{AccountCommand, CreateAccountCommand, CreditAccountCommand, DepositAccountCommand}
-import com.demien.domain.account.AccountEvents.{AccountCreated, AccountCreditFailedInsufficientFunds, AccountCreditPerformed, AccountDepositPerformed, AccountEvent}
+import com.demien.domain.account.AccountCommands.{CreateAccountCommand, CreditAccountCommand, DepositAccountCommand}
+import com.demien.domain.account.AccountEvents._
 
 case class AccountDetails(val accountNumber: String, val accountCurrency: String)
 case class Account(val accountDetails: AccountDetails, val balance: BigDecimal)
@@ -13,16 +13,16 @@ object AccountAggregate extends Aggregate[Account,Event] {
    override def processCommand(account: Account, command: Command): Seq[AccountEvent] =
     command match {
 
-      case CreateAccountCommand(accountDetails, balance)
+      case CreateAccountCommand(_, accountDetails, balance)
            => Seq(AccountCreated(accountDetails, balance))
 
-      case CreditAccountCommand(amount, moneyTransferId) =>
+      case CreditAccountCommand(_, amount, moneyTransferId) =>
         if (amount.compareTo(account.balance) > 0)
           Seq(AccountCreditFailedInsufficientFunds(moneyTransferId))
         else
           Seq(AccountCreditPerformed(amount, moneyTransferId))
 
-      case DepositAccountCommand(amount, moneyTransferId) =>
+      case DepositAccountCommand(_, amount, moneyTransferId) =>
         Seq(AccountDepositPerformed(amount, moneyTransferId))
 
       case _ => unknownCommand(command)

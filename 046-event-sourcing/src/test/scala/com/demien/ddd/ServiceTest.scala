@@ -4,12 +4,11 @@ import com.demien.cqrs.Command
 import com.demien.eventStore.EventStore
 import org.scalatest.FunSuite
 
-import scala.collection.mutable
-
 class ServiceTest extends FunSuite {
 
   case class TestEntity(val value:Int)
-  case class TestEvent(val newValue:Int) {}
+
+  case class TestEvent(val newValue: Int)
 
   class TestAggregate extends Aggregate[TestEntity, TestEvent] {
     override def newInstance(): TestEntity = TestEntity(0)
@@ -32,9 +31,8 @@ class ServiceTest extends FunSuite {
   val service = new Service[TestEntity,TestEvent](testEventStore, testAggregate)
 
   test("testProcess") {
-    service.process(100, new Command {})
+    service.process(new Command(-1))
     assert(testEventStore.savedEvents === Seq(TestEvent(10), TestEvent(20), TestEvent(30)))
-
 
 
   }

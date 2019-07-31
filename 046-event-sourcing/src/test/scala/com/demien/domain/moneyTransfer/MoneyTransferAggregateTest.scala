@@ -1,7 +1,7 @@
 package com.demien.domain.moneyTransfer
 
-import com.demien.domain.moneyTransfer.MoneyTransferCommands.{MoneyTransferCreateCommand, MoneyTransferStateCompletedCommand, MoneyTransferStateCreditedCommand}
-import com.demien.domain.moneyTransfer.MoneyTransferEvents.{MoneyTransferCreatedEvent, MoneyTransferStateCompletedEvent, MoneyTransferStateCreditedEvent}
+import com.demien.domain.moneyTransfer.MoneyTransferCommands.{MoneyTransferCreateCommand, MoneyTransferSetStateCompletedCommand, MoneyTransferSetStateCreditedCommand}
+import com.demien.domain.moneyTransfer.MoneyTransferEvents.{MoneyTransferCreatedEvent, MoneyTransferStateChangedToCompletedEvent, MoneyTransferStateChangedToCreditedEvent}
 import org.scalatest.FunSuite
 
 class MoneyTransferAggregateTest extends FunSuite {
@@ -18,11 +18,11 @@ class MoneyTransferAggregateTest extends FunSuite {
     assert(created.state === TransferState.CREATED)
     assert(created.moneyTransferDetails === details)
 
-    val credited = MoneyTransferAggregate.applyEvent(transfer, MoneyTransferStateCreditedEvent(details, transactionId))
+    val credited = MoneyTransferAggregate.applyEvent(transfer, MoneyTransferStateChangedToCreditedEvent(details, transactionId))
     assert(credited.state === TransferState.CREDITED)
     assert(credited.moneyTransferDetails === details)
 
-    val completed = MoneyTransferAggregate.applyEvent(transfer, MoneyTransferStateCompletedEvent(details))
+    val completed = MoneyTransferAggregate.applyEvent(transfer, MoneyTransferStateChangedToCompletedEvent(details))
     assert(completed.state === TransferState.COMPLETED)
     assert(completed.moneyTransferDetails === details)
 
@@ -34,11 +34,11 @@ class MoneyTransferAggregateTest extends FunSuite {
     val created = MoneyTransferAggregate.processCommand(transfer, MoneyTransferCreateCommand(transactionId, details))
     assert( created === Seq(MoneyTransferCreatedEvent(details, transactionId)))
 
-    val credited = MoneyTransferAggregate.processCommand(transfer, MoneyTransferStateCreditedCommand(transactionId) )
-    assert( credited === Seq(MoneyTransferStateCreditedEvent(details, transactionId)))
+    val credited = MoneyTransferAggregate.processCommand(transfer, MoneyTransferSetStateCreditedCommand(transactionId))
+    assert(credited === Seq(MoneyTransferStateChangedToCreditedEvent(details, transactionId)))
 
-    val completed = MoneyTransferAggregate.processCommand(transfer, MoneyTransferStateCompletedCommand(transactionId))
-    assert( completed === Seq(MoneyTransferStateCompletedEvent(details)))
+    val completed = MoneyTransferAggregate.processCommand(transfer, MoneyTransferSetStateCompletedCommand(transactionId))
+    assert(completed === Seq(MoneyTransferStateChangedToCompletedEvent(details)))
 
   }
 

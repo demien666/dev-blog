@@ -1,8 +1,8 @@
 package com.demien.eventBus
 
-import com.demien.ddd.Event
-
 trait EventHandler[E] {
+
+  def getEventNamesToSubscribe(): Seq[String]
 
   def onEvent(event: E): Unit
 

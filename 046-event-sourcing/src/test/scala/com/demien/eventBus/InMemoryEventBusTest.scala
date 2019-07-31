@@ -7,12 +7,16 @@ class InMemoryEventBusTest extends FunSuite {
 
   val eventBus = new InMemoryEventBus[Event]()
 
+  class TestEvent extends Event
+
   class TestHandler extends  EventHandler[Event] {
     var handled = Seq[Event]()
     override def onEvent(event: Event): Unit = handled = handled ++ Seq(event)
+
+    override def getEventNamesToSubscribe(): Seq[String] = Seq("TestEvent")
   }
 
-  class TestEvent extends Event
+
 
   test("testRegisterEventHandler") {
     val handler1 = new TestHandler()
@@ -20,7 +24,7 @@ class InMemoryEventBusTest extends FunSuite {
 
     val testEvent = new TestEvent
 
-    eventBus.registerEventHandler("TestEvent", handler1)
+    eventBus.registerEventHandler(handler1)
     eventBus.dispatch(testEvent)
 
     assert(handler1.handled.length === 1)

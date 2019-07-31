@@ -2,7 +2,7 @@ package com.demien.domain.account
 
 import com.demien.cqrs.Command
 import com.demien.ddd.{Aggregate, Event}
-import com.demien.domain.account.AccountCommands.{CreateAccountCommand, CreditAccountCommand, DepositAccountCommand}
+import com.demien.domain.account.AccountCommands.{AccountCreateCommand, AccountCreditCommand, AccountDepositCommand}
 import com.demien.domain.account.AccountEvents._
 
 case class AccountDetails(val accountNumber: String, val accountCurrency: String)
@@ -13,26 +13,26 @@ object AccountAggregate extends Aggregate[Account,Event] {
    override def processCommand(account: Account, command: Command): Seq[AccountEvent] =
     command match {
 
-      case CreateAccountCommand(_, accountDetails, balance)
-           => Seq(AccountCreated(accountDetails, balance))
+      case AccountCreateCommand(_, accountDetails, balance)
+      => Seq(AccountCreatedEvent(accountDetails, balance))
 
-      case CreditAccountCommand(_, amount, moneyTransferId) =>
+      case AccountCreditCommand(_, amount, moneyTransferId) =>
         if (amount.compareTo(account.balance) > 0)
-          Seq(AccountCreditFailedInsufficientFunds(moneyTransferId))
+          Seq(AccountCreditFailedInsufficientFundsEvent(moneyTransferId))
         else
-          Seq(AccountCreditPerformed(amount, moneyTransferId))
+          Seq(AccountCreditedEvent(amount, moneyTransferId))
 
-      case DepositAccountCommand(_, amount, moneyTransferId) =>
-        Seq(AccountDepositPerformed(amount, moneyTransferId))
+      case AccountDepositCommand(_, amount, moneyTransferId) =>
+        Seq(AccountDepositedEvent(amount, moneyTransferId))
 
       case _ => unknownCommand(command)
     }
 
   override def applyEvent(account: Account, event: Event): Account =
       event match {
-        case AccountCreated(accountDetails, balance) => Account(accountDetails, balance)
-        case AccountCreditPerformed(amount, _) => account.copy(balance = account.balance - amount)
-        case AccountDepositPerformed(amount, _) => account.copy(balance = account.balance + amount)
+        case AccountCreatedEvent(accountDetails, balance) => Account(accountDetails, balance)
+        case AccountCreditedEvent(amount, _) => account.copy(balance = account.balance - amount)
+        case AccountDepositedEvent(amount, _) => account.copy(balance = account.balance + amount)
         case _ => account
       }
 

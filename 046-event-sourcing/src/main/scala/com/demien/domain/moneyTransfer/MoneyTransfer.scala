@@ -2,7 +2,7 @@ package com.demien.domain.moneyTransfer
 
 import com.demien.cqrs.Command
 import com.demien.ddd.{Aggregate, Event}
-import com.demien.domain.moneyTransfer.MoneyTransferCommands.{MoneyTransferCreateCommand, MoneyTransferStateCompletedCommand, MoneyTransferStateCreditedCommand, MoneyTransferStateFailedCommand}
+import com.demien.domain.moneyTransfer.MoneyTransferCommands.{MoneyTransferCreateCommand, MoneyTransferSetStateCompletedCommand, MoneyTransferSetStateCreditedCommand, MoneyTransferSetStateFailedCommand}
 import com.demien.domain.moneyTransfer.MoneyTransferEvents._
 import com.demien.domain.moneyTransfer.TransferState.TransferState
 
@@ -22,13 +22,13 @@ object MoneyTransferAggregate extends Aggregate[MoneyTransfer,Event] {
       case MoneyTransferCreatedEvent(moneyTransferDetails, _)
         => MoneyTransfer(moneyTransferDetails, TransferState.CREATED)
 
-      case MoneyTransferStateCreditedEvent(_, _)
+      case MoneyTransferStateChangedToCreditedEvent(_, _)
         => entity.copy(state = TransferState.CREDITED)
 
-      case MoneyTransferStateCompletedEvent(_)
+      case MoneyTransferStateChangedToCompletedEvent(_)
       => entity.copy(state = TransferState.COMPLETED)
 
-      case MoneyTransferStateFailedEvent(_)
+      case MoneyTransferStateChangedToFailedEvent(_)
       => entity.copy(state = TransferState.FAILED)
 
       case _ => entity
@@ -39,14 +39,14 @@ object MoneyTransferAggregate extends Aggregate[MoneyTransfer,Event] {
       case MoneyTransferCreateCommand(moneyTransferId, moneyTransferDetails)
         => Seq( MoneyTransferCreatedEvent(moneyTransferDetails, moneyTransferId))
 
-      case MoneyTransferStateCreditedCommand(moneyTransferId)
-        => Seq(MoneyTransferStateCreditedEvent(aggregate.moneyTransferDetails, moneyTransferId))
+      case MoneyTransferSetStateCreditedCommand(moneyTransferId)
+      => Seq(MoneyTransferStateChangedToCreditedEvent(aggregate.moneyTransferDetails, moneyTransferId))
 
-      case MoneyTransferStateCompletedCommand(_)
-      => Seq(MoneyTransferStateCompletedEvent(aggregate.moneyTransferDetails))
+      case MoneyTransferSetStateCompletedCommand(_)
+      => Seq(MoneyTransferStateChangedToCompletedEvent(aggregate.moneyTransferDetails))
 
-      case MoneyTransferStateFailedCommand(_)
-      => Seq(MoneyTransferStateFailedEvent(aggregate.moneyTransferDetails))
+      case MoneyTransferSetStateFailedCommand(_)
+      => Seq(MoneyTransferStateChangedToFailedEvent(aggregate.moneyTransferDetails))
 
       case _ => unknownCommand(command)
     }

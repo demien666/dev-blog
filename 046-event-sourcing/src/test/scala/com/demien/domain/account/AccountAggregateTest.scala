@@ -2,8 +2,8 @@ package com.demien.domain.account
 
 import com.demien.cqrs.Command
 import com.demien.ddd.Event
-import com.demien.domain.account.AccountCommands.{CreateAccountCommand, CreditAccountCommand, DepositAccountCommand}
-import com.demien.domain.account.AccountEvents.{AccountCreated, AccountCreditFailedInsufficientFunds, AccountCreditPerformed, AccountDepositPerformed}
+import com.demien.domain.account.AccountCommands.{AccountCreateCommand, AccountCreditCommand, AccountDepositCommand}
+import com.demien.domain.account.AccountEvents.{AccountCreatedEvent, AccountCreditFailedInsufficientFundsEvent, AccountCreditedEvent, AccountDepositedEvent}
 import org.scalatest.FunSuite
 
 class AccountAggregateTest extends FunSuite {
@@ -17,24 +17,24 @@ class AccountAggregateTest extends FunSuite {
 
     checkCmdEvt(
       AccountAggregate.newInstance()
-      , CreateAccountCommand(-1, AccountDetails("12345", "USD"), 10)
-      , AccountCreated(AccountDetails("12345", "USD"), 10)
+      , AccountCreateCommand(-1, AccountDetails("12345", "USD"), 10)
+      , AccountCreatedEvent(AccountDetails("12345", "USD"), 10)
     )
 
     val account = Account(AccountDetails("12345", "USD"), 10)
     val transId = Option(1)
-    checkCmdEvt(account, CreditAccountCommand(-1, 7, transId), AccountCreditPerformed(7, transId))
-    checkCmdEvt(account, CreditAccountCommand(-1, 11, transId), AccountCreditFailedInsufficientFunds(transId))
-    checkCmdEvt(account, DepositAccountCommand(-1, 3, transId), AccountDepositPerformed(3, transId))
+    checkCmdEvt(account, AccountCreditCommand(-1, 7, transId), AccountCreditedEvent(7, transId))
+    checkCmdEvt(account, AccountCreditCommand(-1, 11, transId), AccountCreditFailedInsufficientFundsEvent(transId))
+    checkCmdEvt(account, AccountDepositCommand(-1, 3, transId), AccountDepositedEvent(3, transId))
 
   }
 
   test("testApplyEvent") {
     val account =
       Seq(
-        AccountCreated(AccountDetails("12345", "USD"), 10),
-        AccountDepositPerformed(3),
-        AccountCreditPerformed(8)
+        AccountCreatedEvent(AccountDetails("12345", "USD"), 10),
+        AccountDepositedEvent(3),
+        AccountCreditedEvent(8)
       ).foldLeft(AccountAggregate.newInstance()) {
         (acc, evt) => AccountAggregate.applyEvent(acc, evt)
       }

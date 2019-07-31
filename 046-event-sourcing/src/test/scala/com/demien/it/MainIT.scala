@@ -1,7 +1,7 @@
 package com.demien.it
 
 import com.demien.ddd.Event
-import com.demien.domain.account.AccountCommands.CreateAccountCommand
+import com.demien.domain.account.AccountCommands.AccountCreateCommand
 import com.demien.domain.account.{Account, AccountDetails, AccountEventHandler, AccountService}
 import com.demien.domain.moneyTransfer.MoneyTransferCommands.MoneyTransferCreateCommand
 import com.demien.domain.moneyTransfer._
@@ -20,12 +20,8 @@ class MainIT extends FunSuite {
   val accountEventHandler = new AccountEventHandler(accountService)
   val transferEventHandler = new MoneyTransferEventHandler(transferService)
 
-  eventBus.registerEventHandler("MoneyTransferCreatedEvent", accountEventHandler)
-  eventBus.registerEventHandler("MoneyTransferStateCreditedEvent", accountEventHandler)
-
-  eventBus.registerEventHandler("AccountCreditPerformed", transferEventHandler)
-  eventBus.registerEventHandler("AccountDepositPerformed", transferEventHandler)
-  eventBus.registerEventHandler("AccountCreditFailedInsufficientFunds", transferEventHandler)
+  eventBus.registerEventHandler(accountEventHandler)
+  eventBus.registerEventHandler(transferEventHandler)
 
   var index = 1;
 
@@ -37,10 +33,10 @@ class MainIT extends FunSuite {
   def transfer(acc1Balance: BigDecimal, acc2Balance: BigDecimal, transferAmount: BigDecimal):(Account, Account, MoneyTransfer) = {
 
     val accountId1 = getId()
-    accountService.process(CreateAccountCommand(accountId1, AccountDetails("123", "USD"), acc1Balance))
+    accountService.process(AccountCreateCommand(accountId1, AccountDetails("123", "USD"), acc1Balance))
 
     val accountId2 = getId()
-    accountService.process(CreateAccountCommand(accountId2, AccountDetails("234", "USD"), acc2Balance))
+    accountService.process(AccountCreateCommand(accountId2, AccountDetails("234", "USD"), acc2Balance))
 
     val transferId = getId()
     transferService.process(MoneyTransferCreateCommand(transferId, MoneyTransferDetails(accountId1, accountId2, transferAmount)))

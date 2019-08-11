@@ -8,13 +8,13 @@ import com.demien.eventBus.EventHandler
 class MoneyTransferEventHandler(moneyTransferService: MoneyTransferService) extends EventHandler[Event] {
   override def onEvent(event: Event): Unit =
     event match {
-      case AccountCreditedEvent(_, moneyTransferId)
+      case AccountCreditedEvent(_, _, moneyTransferId)
       => if (moneyTransferId.nonEmpty) moneyTransferService.process(MoneyTransferSetStateCreditedCommand(moneyTransferId.get))
 
-      case AccountDepositedEvent(_, moneyTransferId)
+      case AccountDepositedEvent(_, _, moneyTransferId)
       => if (moneyTransferId.nonEmpty) moneyTransferService.process(MoneyTransferSetStateCompletedCommand(moneyTransferId.get))
 
-      case AccountCreditFailedInsufficientFundsEvent(moneyTransferId)
+      case AccountCreditFailedInsufficientFundsEvent(_, moneyTransferId)
       => if (moneyTransferId.nonEmpty) moneyTransferService.process(MoneyTransferSetStateFailedCommand(moneyTransferId.get))
 
       case _ =>

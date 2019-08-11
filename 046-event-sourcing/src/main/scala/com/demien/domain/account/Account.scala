@@ -10,29 +10,29 @@ case class Account(val accountDetails: AccountDetails, val balance: BigDecimal)
 
 object AccountAggregate extends Aggregate[Account,Event] {
 
-   override def processCommand(account: Account, command: Command): Seq[AccountEvent] =
+  override def processCommand(account: Account, command: Command): Seq[Event] =
     command match {
 
-      case AccountCreateCommand(_, accountDetails, balance)
-      => Seq(AccountCreatedEvent(accountDetails, balance))
+      case AccountCreateCommand(accountId, accountDetails, balance)
+      => Seq(AccountCreatedEvent(accountId, accountDetails, balance))
 
-      case AccountCreditCommand(_, amount, moneyTransferId) =>
+      case AccountCreditCommand(accountId, amount, moneyTransferId) =>
         if (amount.compareTo(account.balance) > 0)
-          Seq(AccountCreditFailedInsufficientFundsEvent(moneyTransferId))
+          Seq(AccountCreditFailedInsufficientFundsEvent(accountId, moneyTransferId))
         else
-          Seq(AccountCreditedEvent(amount, moneyTransferId))
+          Seq(AccountCreditedEvent(accountId, amount, moneyTransferId))
 
-      case AccountDepositCommand(_, amount, moneyTransferId) =>
-        Seq(AccountDepositedEvent(amount, moneyTransferId))
+      case AccountDepositCommand(accountId, amount, moneyTransferId) =>
+        Seq(AccountDepositedEvent(accountId, amount, moneyTransferId))
 
       case _ => unknownCommand(command)
     }
 
   override def applyEvent(account: Account, event: Event): Account =
       event match {
-        case AccountCreatedEvent(accountDetails, balance) => Account(accountDetails, balance)
-        case AccountCreditedEvent(amount, _) => account.copy(balance = account.balance - amount)
-        case AccountDepositedEvent(amount, _) => account.copy(balance = account.balance + amount)
+        case AccountCreatedEvent(_, accountDetails, balance) => Account(accountDetails, balance)
+        case AccountCreditedEvent(_, amount, _) => account.copy(balance = account.balance - amount)
+        case AccountDepositedEvent(_, amount, _) => account.copy(balance = account.balance + amount)
         case _ => account
       }
 

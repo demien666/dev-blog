@@ -22,7 +22,7 @@ class MoneyTransferAggregateTest extends FunSuite {
     assert(credited.state === TransferState.CREDITED)
     assert(credited.moneyTransferDetails === details)
 
-    val completed = MoneyTransferAggregate.applyEvent(transfer, MoneyTransferStateChangedToCompletedEvent(details))
+    val completed = MoneyTransferAggregate.applyEvent(transfer, MoneyTransferStateChangedToCompletedEvent(details, transactionId))
     assert(completed.state === TransferState.COMPLETED)
     assert(completed.moneyTransferDetails === details)
 
@@ -38,7 +38,7 @@ class MoneyTransferAggregateTest extends FunSuite {
     assert(credited === Seq(MoneyTransferStateChangedToCreditedEvent(details, transactionId)))
 
     val completed = MoneyTransferAggregate.processCommand(transfer, MoneyTransferSetStateCompletedCommand(transactionId))
-    assert(completed === Seq(MoneyTransferStateChangedToCompletedEvent(details)))
+    assert(completed === Seq(MoneyTransferStateChangedToCompletedEvent(details, transactionId)))
 
   }
 

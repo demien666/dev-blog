@@ -1,4 +1,4 @@
 package com.demien.ddd
 
-trait Event
+class Event(val aggregateId: Int)
 

@@ -18,23 +18,23 @@ class AccountAggregateTest extends FunSuite {
     checkCmdEvt(
       AccountAggregate.newInstance()
       , AccountCreateCommand(-1, AccountDetails("12345", "USD"), 10)
-      , AccountCreatedEvent(AccountDetails("12345", "USD"), 10)
+      , AccountCreatedEvent(-1, AccountDetails("12345", "USD"), 10)
     )
 
     val account = Account(AccountDetails("12345", "USD"), 10)
     val transId = Option(1)
-    checkCmdEvt(account, AccountCreditCommand(-1, 7, transId), AccountCreditedEvent(7, transId))
-    checkCmdEvt(account, AccountCreditCommand(-1, 11, transId), AccountCreditFailedInsufficientFundsEvent(transId))
-    checkCmdEvt(account, AccountDepositCommand(-1, 3, transId), AccountDepositedEvent(3, transId))
+    checkCmdEvt(account, AccountCreditCommand(-1, 7, transId), AccountCreditedEvent(-1, 7, transId))
+    checkCmdEvt(account, AccountCreditCommand(-1, 11, transId), AccountCreditFailedInsufficientFundsEvent(-1, transId))
+    checkCmdEvt(account, AccountDepositCommand(-1, 3, transId), AccountDepositedEvent(-1, 3, transId))
 
   }
 
   test("testApplyEvent") {
     val account =
       Seq(
-        AccountCreatedEvent(AccountDetails("12345", "USD"), 10),
-        AccountDepositedEvent(3),
-        AccountCreditedEvent(8)
+        AccountCreatedEvent(-1, AccountDetails("12345", "USD"), 10),
+        AccountDepositedEvent(-1, 3),
+        AccountCreditedEvent(-1, 8)
       ).foldLeft(AccountAggregate.newInstance()) {
         (acc, evt) => AccountAggregate.applyEvent(acc, evt)
       }

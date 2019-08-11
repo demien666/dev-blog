@@ -7,7 +7,7 @@ class InMemoryEventBusTest extends FunSuite {
 
   val eventBus = new InMemoryEventBus[Event]()
 
-  class TestEvent extends Event
+  class TestEvent extends Event(-1)
 
   class TestHandler extends  EventHandler[Event] {
     var handled = Seq[Event]()

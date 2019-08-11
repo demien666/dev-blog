@@ -25,16 +25,16 @@ object MoneyTransferAggregate extends Aggregate[MoneyTransfer,Event] {
       case MoneyTransferStateChangedToCreditedEvent(_, _)
         => entity.copy(state = TransferState.CREDITED)
 
-      case MoneyTransferStateChangedToCompletedEvent(_)
+      case MoneyTransferStateChangedToCompletedEvent(_, _)
       => entity.copy(state = TransferState.COMPLETED)
 
-      case MoneyTransferStateChangedToFailedEvent(_)
+      case MoneyTransferStateChangedToFailedEvent(_, _)
       => entity.copy(state = TransferState.FAILED)
 
       case _ => entity
     }
 
-  override def processCommand(aggregate: MoneyTransfer, command: Command): Seq[MoneyTransferEvent] =
+  override def processCommand(aggregate: MoneyTransfer, command: Command): Seq[Event] =
     command match {
       case MoneyTransferCreateCommand(moneyTransferId, moneyTransferDetails)
         => Seq( MoneyTransferCreatedEvent(moneyTransferDetails, moneyTransferId))
@@ -42,11 +42,11 @@ object MoneyTransferAggregate extends Aggregate[MoneyTransfer,Event] {
       case MoneyTransferSetStateCreditedCommand(moneyTransferId)
       => Seq(MoneyTransferStateChangedToCreditedEvent(aggregate.moneyTransferDetails, moneyTransferId))
 
-      case MoneyTransferSetStateCompletedCommand(_)
-      => Seq(MoneyTransferStateChangedToCompletedEvent(aggregate.moneyTransferDetails))
+      case MoneyTransferSetStateCompletedCommand(moneyTransferId)
+      => Seq(MoneyTransferStateChangedToCompletedEvent(aggregate.moneyTransferDetails, moneyTransferId))
 
-      case MoneyTransferSetStateFailedCommand(_)
-      => Seq(MoneyTransferStateChangedToFailedEvent(aggregate.moneyTransferDetails))
+      case MoneyTransferSetStateFailedCommand(moneyTransferId)
+      => Seq(MoneyTransferStateChangedToFailedEvent(aggregate.moneyTransferDetails, moneyTransferId))
 
       case _ => unknownCommand(command)
     }

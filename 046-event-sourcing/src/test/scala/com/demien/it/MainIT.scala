@@ -7,7 +7,9 @@ import com.demien.domain.moneyTransfer.MoneyTransferCommands.MoneyTransferCreate
 import com.demien.domain.moneyTransfer._
 import com.demien.eventBus.InMemoryEventBus
 import com.demien.eventStore.InMemoryEventStore
-import com.demien.projection.{AccountProjectionEventHandler, InMemoryEventDrivenRepository, MoneyTransferProjectionEventHandler}
+import com.demien.projection.InMemoryEventDrivenRepository
+import com.demien.projection.account.AccountProjectionEventHandler
+import com.demien.projection.moneyTransfer.MoneyTransferProjectionEventHandler
 import org.scalatest.FunSuite
 
 class MainIT extends FunSuite {

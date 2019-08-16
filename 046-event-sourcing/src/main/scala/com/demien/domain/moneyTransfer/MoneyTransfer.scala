@@ -11,8 +11,9 @@ object TransferState extends Enumeration {
   val CREATED, CREDITED, COMPLETED, FAILED = Value
 }
 
-case class MoneyTransferDetails(val accountIdFrom: Int, val accountIdTo: Int, val amount: BigDecimal)
-case class MoneyTransfer(val moneyTransferDetails: MoneyTransferDetails, val state: TransferState = TransferState.CREATED)
+case class MoneyTransferDetails(accountIdFrom: Int, accountIdTo: Int, amount: BigDecimal)
+
+case class MoneyTransfer(moneyTransferDetails: MoneyTransferDetails, state: TransferState = TransferState.CREATED)
 
 // Aggregate
 object MoneyTransferAggregate extends Aggregate[MoneyTransfer,Event] {

@@ -10,13 +10,13 @@ class MTransferServiceTest extends FunSuite {
   val mTransferRepo = new InMemoryRepository[MTransfer]
   val mTransferService = new MTransferService(mTransferRepo, accountRepo)
 
-  val account1 = Account("100", 100)
-  val account2 = Account("200", 200)
+  val account1 = new Account("100", 100)
+  val account2 = new Account("200", 200)
 
   test("testExecute - success") {
 
-    val accountId1 = accountRepo.save(Account("100", 100))
-    val accountId2 = accountRepo.save(Account("200", 200))
+    val accountId1 = accountRepo.save(new Account("100", 100))
+    val accountId2 = accountRepo.save(new Account("200", 200))
 
     val mTransferId = mTransferService.execute(MTransfer(accountId1, accountId2, 20))
     val savedTransfer = mTransferService.getById(mTransferId)
@@ -30,8 +30,8 @@ class MTransferServiceTest extends FunSuite {
 
   test("testExecute - failed") {
 
-    val accountId1 = accountRepo.save(Account("100", 100))
-    val accountId2 = accountRepo.save(Account("200", 200))
+    val accountId1 = accountRepo.save(new Account("100", 100))
+    val accountId2 = accountRepo.save(new Account("200", 200))
 
     intercept[OperationExecutionException] {
       val mTransferId = mTransferService.execute(MTransfer(accountId1, accountId2, 250))

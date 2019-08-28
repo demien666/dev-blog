@@ -2,7 +2,7 @@ package com.demien.mtransfer.service
 
 import com.demien.mtransfer.repo.Repository
 
-class Service[T](repo: Repository[T]) extends Repository[T] {
+abstract class Service[T](repo: Repository[T]) extends Repository[T] {
 
   override def getById(id: Int): T = repo.getById(id)
 

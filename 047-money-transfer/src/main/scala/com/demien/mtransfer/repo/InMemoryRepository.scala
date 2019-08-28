@@ -13,8 +13,7 @@ class InMemoryRepository[T] extends Repository[T] {
     index.synchronized {
       index = index + 1
       storage.put(index, entity)
-      val indexCopy = index
-      indexCopy
+      index
     }
   }
 

@@ -18,7 +18,7 @@ class MTransferServiceTest extends FunSuite {
     val accountId1 = accountRepo.save(new Account("100", 100))
     val accountId2 = accountRepo.save(new Account("200", 200))
 
-    val mTransferId = mTransferService.execute(MTransfer(accountId1, accountId2, 20))
+    val mTransferId = mTransferService.save(MTransfer(accountId1, accountId2, 20))
     val savedTransfer = mTransferService.getById(mTransferId)
     assert(savedTransfer.state === "COMPLETED")
 
@@ -34,7 +34,7 @@ class MTransferServiceTest extends FunSuite {
     val accountId2 = accountRepo.save(new Account("200", 200))
 
     intercept[OperationExecutionException] {
-      val mTransferId = mTransferService.execute(MTransfer(accountId1, accountId2, 250))
+      val mTransferId = mTransferService.save(MTransfer(accountId1, accountId2, 250))
       val savedTransfer = mTransferService.getById(mTransferId)
       assert(savedTransfer.state === "FAILED")
     }

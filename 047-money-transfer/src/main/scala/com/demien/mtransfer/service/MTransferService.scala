@@ -6,7 +6,7 @@ import com.demien.mtransfer.repo.{OperationExecutionException, Repository}
 class MTransferService(mTransferRepo: Repository[MTransfer], accountRepo: Repository[Account])
   extends Service[MTransfer](mTransferRepo) {
 
-  def execute(mTransfer: MTransfer): Int = {
+  override def save(mTransfer: MTransfer): Int = {
     val id = mTransferRepo.save(mTransfer)
     try {
       accountRepo.bulkUpdate(Seq(

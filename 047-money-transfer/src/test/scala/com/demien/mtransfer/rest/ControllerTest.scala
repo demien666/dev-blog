@@ -6,11 +6,13 @@ import spark.Spark
 
 abstract class ControllerTest[T](val servicePath: String) extends FunSuite with BeforeAndAfterAll {
 
-  val basePath = "http://localhost:8080/api/"
+  val basePath = "http://localhost:8080"
+
+  def sleep(time: Long) = Thread.sleep(time)
 
   override def beforeAll: Unit = {
     App.main(null)
-    Thread.sleep(5000)
+    sleep(5000)
   }
 
   override def afterAll(): Unit = {

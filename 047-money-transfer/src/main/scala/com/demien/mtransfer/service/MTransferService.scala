@@ -17,7 +17,7 @@ class MTransferService(mTransferRepo: Repository[MTransfer], accountRepo: Reposi
     } catch {
       case ex: OperationExecutionException => {
         mTransferRepo.update(id, mTransfer.copy(state = "FAILED"))
-        throw ex
+        ex.printStackTrace()
       }
     }
     id

@@ -8,6 +8,6 @@ object AccountController {
 }
 
 class AccountController(val accountService: AccountService)
-  extends Controller[Account](AccountController.PATH, accountService, new Account(null, null).getClass) {
+  extends Controller[Account](AccountController.PATH, accountService, classOf[Account]) {
 
 }

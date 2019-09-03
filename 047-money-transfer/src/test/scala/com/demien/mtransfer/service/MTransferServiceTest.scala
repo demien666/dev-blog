@@ -1,7 +1,7 @@
 package com.demien.mtransfer.service
 
 import com.demien.mtransfer.domain.{Account, MTransfer}
-import com.demien.mtransfer.repo.{InMemoryRepository, OperationExecutionException}
+import com.demien.mtransfer.repo.InMemoryRepository
 import org.scalatest.FunSuite
 
 class MTransferServiceTest extends FunSuite {
@@ -20,7 +20,7 @@ class MTransferServiceTest extends FunSuite {
 
     val mTransferId = mTransferService.save(MTransfer(accountId1, accountId2, 20))
     val savedTransfer = mTransferService.getById(mTransferId)
-    assert(savedTransfer.state === "COMPLETED")
+    assert(savedTransfer.state === MTransfer.COMPLETED)
 
     val updatedAccount1 = accountRepo.getById(accountId1)
     val updatedAccount2 = accountRepo.getById(accountId2)
@@ -33,11 +33,10 @@ class MTransferServiceTest extends FunSuite {
     val accountId1 = accountRepo.save(new Account("100", 100))
     val accountId2 = accountRepo.save(new Account("200", 200))
 
-    intercept[OperationExecutionException] {
+
       val mTransferId = mTransferService.save(MTransfer(accountId1, accountId2, 250))
       val savedTransfer = mTransferService.getById(mTransferId)
-      assert(savedTransfer.state === "FAILED")
-    }
+    assert(savedTransfer.state === MTransfer.FAILED)
 
     val updatedAccount1 = accountRepo.getById(accountId1)
     val updatedAccount2 = accountRepo.getById(accountId2)

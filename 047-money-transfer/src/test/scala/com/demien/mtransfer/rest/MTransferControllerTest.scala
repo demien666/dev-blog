@@ -17,7 +17,7 @@ class MTransferControllerTest extends ControllerTest[MTransfer](MTransferControl
     sleep(100)
 
     val saved = App.mTransferRepo.getById(mTransferId)
-    assert(saved.state === "COMPLETED")
+    assert(saved.state === MTransfer.COMPLETED)
 
     val account1Updated = App.accountRepo.getById(accountId1)
     val account2Updated = App.accountRepo.getById(accountId2)
@@ -39,7 +39,7 @@ class MTransferControllerTest extends ControllerTest[MTransfer](MTransferControl
     sleep(100)
 
     val saved = App.mTransferRepo.getById(mTransferId)
-    assert(saved.state === "FAILED")
+    assert(saved.state === MTransfer.FAILED)
 
     val account1Updated = App.accountRepo.getById(accountId1)
     val account2Updated = App.accountRepo.getById(accountId2)

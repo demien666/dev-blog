@@ -13,10 +13,10 @@ class MTransferService(mTransferRepo: Repository[MTransfer], accountRepo: Reposi
         (mTransfer.accIdFrom, acc => acc.credit(mTransfer.amount)),
         (mTransfer.accIdTo, acc => acc.debit(mTransfer.amount))
       ))
-      mTransferRepo.update(id, mTransfer.copy(state = "COMPLETED"))
+      mTransferRepo.update(id, mTransfer.copy(state = MTransfer.COMPLETED))
     } catch {
       case ex: OperationExecutionException => {
-        mTransferRepo.update(id, mTransfer.copy(state = "FAILED"))
+        mTransferRepo.update(id, mTransfer.copy(state = MTransfer.FAILED))
         ex.printStackTrace()
       }
     }

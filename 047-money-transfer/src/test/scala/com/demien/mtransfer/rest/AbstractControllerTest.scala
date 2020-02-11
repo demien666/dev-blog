@@ -3,7 +3,10 @@ package com.demien.mtransfer.rest
 import com.demien.mtransfer.App
 import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import spark.Spark
+import org.junit.runner.RunWith
+import org.scalatestplus.junit.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 abstract class ControllerTest[T](val servicePath: String) extends FunSuite with BeforeAndAfterAll {
 
   val basePath = "http://localhost:8080"

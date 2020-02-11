@@ -2,8 +2,11 @@ package com.demien.mtransfer.service
 
 import com.demien.mtransfer.domain.{Account, MTransfer}
 import com.demien.mtransfer.repo.InMemoryRepository
+import org.junit.runner.RunWith
 import org.scalatest.FunSuite
+import org.scalatestplus.junit.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class MTransferServiceTest extends FunSuite {
 
   val accountRepo = new InMemoryRepository[Account]
@@ -13,7 +16,7 @@ class MTransferServiceTest extends FunSuite {
   val account1 = new Account("100", 100)
   val account2 = new Account("200", 200)
 
-  test("testExecute - success") {
+  test("transfer test: success") {
 
     val accountId1 = accountRepo.save(new Account("100", 100))
     val accountId2 = accountRepo.save(new Account("200", 200))
@@ -28,7 +31,7 @@ class MTransferServiceTest extends FunSuite {
     assert(updatedAccount2.balance === 220)
   }
 
-  test("testExecute - failed") {
+  test("transfer test: fail") {
 
     val accountId1 = accountRepo.save(new Account("100", 100))
     val accountId2 = accountRepo.save(new Account("200", 200))

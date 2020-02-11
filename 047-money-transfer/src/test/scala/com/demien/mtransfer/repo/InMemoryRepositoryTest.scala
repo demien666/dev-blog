@@ -1,7 +1,10 @@
 package com.demien.mtransfer.repo
 
 import org.scalatest.FunSuite
+import org.junit.runner.RunWith
+import org.scalatestplus.junit.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class InMemoryRepositoryTest extends FunSuite {
 
   case class TestException(msg: String) extends RuntimeException(msg)
@@ -12,7 +15,7 @@ class InMemoryRepositoryTest extends FunSuite {
 
   val repo = new InMemoryRepository[TestClass]
 
-  test("testUpdate") {
+  test("test update") {
     val toSave = TestClass("initial")
     val savedId1 = repo.save(toSave)
     val forUpdate = TestClass("forUpdate")

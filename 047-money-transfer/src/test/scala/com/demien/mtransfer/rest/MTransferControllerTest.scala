@@ -2,10 +2,14 @@ package com.demien.mtransfer.rest
 
 import com.demien.mtransfer.App
 import com.demien.mtransfer.domain.{Account, MTransfer}
+import org.junit.runner.RunWith
+import org.scalatestplus.junit.JUnitRunner
+import org.junit.Test
 
+@RunWith(classOf[JUnitRunner])
 class MTransferControllerTest extends ControllerTest[MTransfer](MTransferController.PATH) {
 
-  test("money transfer test - success") {
+  test("money transfer test: success") {
 
     val account1 = new Account("100", 100)
     val account2 = new Account("200", 200)
@@ -27,7 +31,7 @@ class MTransferControllerTest extends ControllerTest[MTransfer](MTransferControl
   }
 
 
-  test("money transfer test - fail") {
+  test("money transfer test: fail") {
 
     val account1 = new Account("100", 100)
     val account2 = new Account("200", 200)

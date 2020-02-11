@@ -1,7 +1,10 @@
 package com.demien.mtransfer.rest
 
 import com.demien.mtransfer.domain.Account
+import org.junit.runner.RunWith
+import org.scalatestplus.junit.JUnitRunner
 
+@RunWith(classOf[JUnitRunner])
 class AccountControllerTest extends ControllerTest[Account](AccountController.PATH) {
 
   test("save account test") {

@@ -1,9 +1,8 @@
 package com.demien.mtransfer.rest
 
 import com.demien.mtransfer.App
-import org.scalatest.{BeforeAndAfterAll, FunSuite}
-import spark.Spark
 import org.junit.runner.RunWith
+import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import org.scalatestplus.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
@@ -16,10 +15,6 @@ abstract class ControllerTest[T](val servicePath: String) extends FunSuite with 
   override def beforeAll: Unit = {
     App.main(null)
     sleep(5000)
-  }
-
-  override def afterAll(): Unit = {
-    Spark.stop()
   }
 
   def getById(id: Int, cl: Class[_]): T = {

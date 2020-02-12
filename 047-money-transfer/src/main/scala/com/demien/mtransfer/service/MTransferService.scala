@@ -1,7 +1,8 @@
 package com.demien.mtransfer.service
 
+import com.demien.mtransfer.domain.Account.InsufficientBalanceException
 import com.demien.mtransfer.domain.{Account, MTransfer}
-import com.demien.mtransfer.repo.{OperationExecutionException, Repository}
+import com.demien.mtransfer.repo.Repository
 
 class MTransferService(mTransferRepo: Repository[MTransfer], accountRepo: Repository[Account])
   extends Service[MTransfer](mTransferRepo) {
@@ -9,14 +10,14 @@ class MTransferService(mTransferRepo: Repository[MTransfer], accountRepo: Reposi
   override def save(mTransfer: MTransfer): Int = {
     val id = mTransferRepo.save(mTransfer)
     try {
-      accountRepo.bulkUpdate(Seq(
-        (mTransfer.accIdFrom, acc => acc.credit(mTransfer.amount)),
-        (mTransfer.accIdTo, acc => acc.debit(mTransfer.amount))
-      ))
-      mTransferRepo.update(id, mTransfer.copy(state = MTransfer.COMPLETED))
+      accountRepo.biUpdate(
+        mTransfer.accIdFrom, acc => acc.credit(mTransfer.amount),
+        mTransfer.accIdTo, acc => acc.debit(mTransfer.amount)
+      )
+      mTransferRepo.update(id, mTransfer => mTransfer.copy(state = MTransfer.COMPLETED))
     } catch {
-      case ex: OperationExecutionException => {
-        mTransferRepo.update(id, mTransfer.copy(state = MTransfer.FAILED))
+      case ex: InsufficientBalanceException => {
+        mTransferRepo.update(id, mTransfer => mTransfer.copy(state = MTransfer.FAILED))
         ex.printStackTrace()
       }
     }

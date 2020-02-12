@@ -6,9 +6,9 @@ trait Repository[T] {
 
   def save(entity: T): Int
 
-  def update(id: Int, entity: T): Unit = bulkUpdate(Seq((id, _ => entity)))
+  def update(id: Int, mutator: T => T): Unit
 
-  def bulkUpdate(ops: Seq[(Int, T => T)]): Unit
+  def biUpdate(id1: Int, mutator1: T => T, id2: Int, mutator2: T => T): Unit
 
   def find(predicate: T => Boolean): Seq[(Int, T)]
 

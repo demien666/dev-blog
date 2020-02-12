@@ -2,13 +2,15 @@ package com.demien.mtransfer.service
 
 import com.demien.mtransfer.repo.Repository
 
-abstract class Service[T](repo: Repository[T]) extends Repository[T] {
+abstract class Service[T](repo: Repository[T]) {
 
-  override def getById(id: Int): T = repo.getById(id)
+  def getById(id: Int): T = repo.getById(id)
 
-  override def save(entity: T): Int = repo.save(entity)
+  def save(entity: T): Int = repo.save(entity)
 
-  override def bulkUpdate(ops: Seq[(Int, T => T)]): Unit = repo.bulkUpdate(ops)
+  def update(id: Int, mutator: T => T): Unit = repo.update(id, mutator)
 
-  override def find(predicate: T => Boolean): Seq[(Int, T)] = repo.find(predicate)
+  def biUpdate(id1: Int, mutator1: T => T, id2: Int, mutator2: T => T): Unit = repo.biUpdate(id1, mutator1, id2, mutator2)
+
+  def find(predicate: T => Boolean): Seq[(Int, T)] = repo.find(predicate)
 }

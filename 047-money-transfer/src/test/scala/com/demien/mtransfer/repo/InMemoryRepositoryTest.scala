@@ -1,7 +1,7 @@
 package com.demien.mtransfer.repo
 
-import org.scalatest.FunSuite
 import org.junit.runner.RunWith
+import org.scalatest.FunSuite
 import org.scalatestplus.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
@@ -19,7 +19,7 @@ class InMemoryRepositoryTest extends FunSuite {
     val toSave = TestClass("initial")
     val savedId1 = repo.save(toSave)
     val forUpdate = TestClass("forUpdate")
-    repo.update(savedId1, forUpdate)
+    repo.update(savedId1, _ => forUpdate)
     val updated = repo.getById(savedId1)
     assert(updated === forUpdate)
   }
@@ -27,10 +27,10 @@ class InMemoryRepositoryTest extends FunSuite {
   test("testBulkUpdate: success") {
     val savedId1 = repo.save(TestClass("bulk-one"))
     val savedId2 = repo.save(TestClass("bulk-two"))
-    repo.bulkUpdate(Seq(
-      (savedId1, entity => entity.copy(data = "bulk-one-updated")),
-      (savedId2, entity => entity.copy(data = "bulk-two-updated"))
-    ))
+    repo.biUpdate(
+      savedId1, entity => entity.copy(data = "bulk-one-updated"),
+      savedId2, entity => entity.copy(data = "bulk-two-updated")
+    )
     assert(repo.getById(savedId1) === TestClass("bulk-one-updated"))
     assert(repo.getById(savedId2) === TestClass("bulk-two-updated"))
   }
@@ -39,11 +39,11 @@ class InMemoryRepositoryTest extends FunSuite {
     val savedId1 = repo.save(TestClass("bulk-one"))
     val savedId2 = repo.save(TestClass("bulk-two"))
 
-    intercept[OperationExecutionException] {
-      repo.bulkUpdate(Seq(
-        (savedId1, entity => entity.copy(data = "bulk-one-updated")),
-        (savedId2, entity => entity.fail())
-      ))
+    intercept[TestException] {
+      repo.biUpdate(
+        savedId1, entity => entity.copy(data = "bulk-one-updated"),
+        savedId2, entity => entity.fail()
+      )
     }
 
     assert(repo.getById(savedId1) === TestClass("bulk-one"))

@@ -4,12 +4,7 @@ import com.demien.mtransfer.service.Service
 import spark.{Request, Response, ResponseTransformer, Spark}
 
 
-abstract class Controller[T](val basePath: String, val service: Service[T], val cl: Class[_]) {
-
-  //def toJson(entity: Any): String = new Gson().toJson(entity)
-
-  //def fromJson(json: String): T = new Gson().fromJson(json, cl)
-
+abstract class AbstractController[T](val basePath: String, val service: Service[T], val cl: Class[_]) {
 
   def getById(request: Request, response: Response): AnyRef = {
     val id = request.params(":id")

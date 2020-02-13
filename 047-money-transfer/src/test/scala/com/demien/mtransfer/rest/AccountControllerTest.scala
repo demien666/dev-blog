@@ -5,7 +5,7 @@ import org.junit.runner.RunWith
 import org.scalatestplus.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class AccountControllerTest extends ControllerTest[Account](AccountController.PATH) {
+class AccountControllerTest extends AbstractControllerTest[Account](AccountController.PATH) {
 
   test("save account test") {
     val account = new Account("111", 222)

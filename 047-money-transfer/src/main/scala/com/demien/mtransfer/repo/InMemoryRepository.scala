@@ -18,7 +18,7 @@ class InMemoryRepository[T] extends Repository[T] {
     newId
   }
 
-  def update(id: Int, mutator: T => T): Unit = storage.computeIfPresent(id, (a, b) => b += mutator(b.last))
+  def update(id: Int, mutator: T => T): Unit = storage.computeIfPresent(id, (_, history) => history += mutator(history.last))
 
   def biUpdate(id1: Int, mutator1: T => T, id2: Int, mutator2: T => T): Unit = {
     if (id1 > id2) biUpdateOrderedToAvoidDeadlock(id1, mutator1, id2, mutator2)
@@ -40,12 +40,12 @@ class InMemoryRepository[T] extends Repository[T] {
   }
 
   override def find(predicate: T => Boolean): Seq[(Int, T)] = {
-    var result = Seq[(Int, T)]()
-    storage.keySet().forEach(k => {
-      val v = storage.get(k).last
-      if (predicate(v)) result = result ++ Seq((k, v))
-    })
-    result
+    import scala.collection.JavaConverters._
+    storage.keySet().iterator().asScala
+      .map(key => (key, storage.get(key).last))
+      .filter(keyValue => predicate(keyValue._2))
+      .toSeq
   }
 
+  override def history(id: Int): Seq[T] = storage.get(id)
 }

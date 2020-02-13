@@ -4,10 +4,9 @@ import com.demien.mtransfer.App
 import com.demien.mtransfer.domain.{Account, MTransfer}
 import org.junit.runner.RunWith
 import org.scalatestplus.junit.JUnitRunner
-import org.junit.Test
 
 @RunWith(classOf[JUnitRunner])
-class MTransferControllerTest extends ControllerTest[MTransfer](MTransferController.PATH) {
+class MTransferControllerTest extends AbstractControllerTest[MTransfer](MTransferController.PATH) {
 
   test("money transfer test: success") {
 

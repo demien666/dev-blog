@@ -64,18 +64,28 @@ class InMemoryRepositoryTest extends FunSuite {
   }
 
   test("testFind") {
-    val savedId1 = repo.save(TestClass("find-one"))
-    val savedId2 = repo.save(TestClass("find-two"))
+    val savedId1 = repo.save(TestClass("find-one-1"))
+    repo.update(savedId1, v => v.copy(data = "find-one-2"))
+    repo.update(savedId1, v => v.copy(data = "find-one-3"))
 
-    val found1 = repo.find(e => e.data.contains("find-one"))
+    repo.save(TestClass("find-two"))
+
+    val found1 = repo.find(e => e.data.contains("find-one-3"))
     assert(found1.length === 1)
     assert(found1.head._1 === savedId1)
-    assert(found1.head._2 === TestClass("find-one"))
+    assert(found1.head._2 === TestClass("find-one-3"))
 
     val found2 = repo.find(e => e.data.contains("find"))
     assert(found2.length === 2)
-
-
   }
+
+  test("testHistory") {
+    val id = repo.save(TestClass("history1"))
+    repo.update(id, v => v.copy(data = "history2"))
+    repo.update(id, v => v.copy(data = "history3"))
+
+    assert(repo.history(id) === Seq(TestClass("history1"), TestClass("history2"), TestClass("history3")))
+  }
+
 
 }

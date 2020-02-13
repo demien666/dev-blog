@@ -6,7 +6,7 @@ import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import org.scalatestplus.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-abstract class ControllerTest[T](val servicePath: String) extends FunSuite with BeforeAndAfterAll {
+abstract class AbstractControllerTest[T](val servicePath: String) extends FunSuite with BeforeAndAfterAll {
 
   val basePath = "http://localhost:8080"
 

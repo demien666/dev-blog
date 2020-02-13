@@ -12,4 +12,6 @@ trait Repository[T] {
 
   def find(predicate: T => Boolean): Seq[(Int, T)]
 
+  def history(id: Int): Seq[T]
+
 }

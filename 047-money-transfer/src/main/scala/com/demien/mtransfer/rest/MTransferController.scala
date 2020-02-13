@@ -8,6 +8,6 @@ object MTransferController {
 }
 
 class MTransferController(val mTransferService: MTransferService)
-  extends Controller[MTransfer](MTransferController.PATH, mTransferService, classOf[MTransfer]) {
+  extends AbstractController[MTransfer](MTransferController.PATH, mTransferService, classOf[MTransfer]) {
 
 }

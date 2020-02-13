@@ -29,7 +29,6 @@ abstract class AbstractControllerTest[T](val servicePath: String) extends FunSui
     assert(response.status === 200)
     val result = Integer.parseInt(response.body)
     result
-
   }
 
 

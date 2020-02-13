@@ -1,19 +1,29 @@
 package com.demien.mtransfer.rest
 
 import com.demien.mtransfer.service.Service
+import org.apache.log4j.LogManager
 import spark.{Request, Response, ResponseTransformer, Spark}
 
 
 abstract class AbstractController[T](val basePath: String, val service: Service[T], val cl: Class[_]) {
 
+  val logger = LogManager.getLogger("AbstractController")
+
+  def logRequestInfo(request: Request): Unit = {
+    logger.info("Processing request:", request.requestMethod(), request.pathInfo())
+  }
+
   def getById(request: Request, response: Response): AnyRef = {
+    logRequestInfo(request)
     val id = request.params(":id")
     val result = service.getById(Integer.parseInt(id)).asInstanceOf[AnyRef]
     result
   }
 
-  def save(request: Request, response: Response): AnyRef =
+  def save(request: Request, response: Response): AnyRef = {
+    logRequestInfo(request)
     service.save(JsonUtil.fromJson(request.body(), cl)).asInstanceOf[AnyRef]
+  }
 
   def sayHello(request: Request, response: Response): AnyRef = "Hello World!"
 

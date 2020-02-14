@@ -9,19 +9,18 @@ abstract class AbstractController[T](val basePath: String, val service: Service[
 
   val logger = LogManager.getLogger("AbstractController")
 
-  def logRequestInfo(request: Request): Unit = {
-    logger.info("Processing request:", request.requestMethod(), request.pathInfo())
-  }
+  def logRequestInfo(request: Request): String = s"Processing request: ${request.requestMethod()} ${request.pathInfo()}"
+
 
   def getById(request: Request, response: Response): AnyRef = {
-    logRequestInfo(request)
+    logger.info(logRequestInfo(request))
     val id = request.params(":id")
     val result = service.getById(Integer.parseInt(id)).asInstanceOf[AnyRef]
     result
   }
 
   def save(request: Request, response: Response): AnyRef = {
-    logRequestInfo(request)
+    logger.info(logRequestInfo(request))
     service.save(JsonUtil.fromJson(request.body(), cl)).asInstanceOf[AnyRef]
   }
 
@@ -34,8 +33,5 @@ abstract class AbstractController[T](val basePath: String, val service: Service[
   Spark.get(basePath + "/hello", sayHello(_, _), jsonTransformer)
   Spark.get(basePath + "/:id", getById(_, _), jsonTransformer)
   Spark.post(basePath, jsonAcceptType, save(_, _), jsonTransformer)
-
-  //Spark.get(basePath+"/:id", accountService.getById(_), )
-
 
 }

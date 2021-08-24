@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: my-kafka-cons-service
+  name: my-kafka-cons-service
+  namespace: my-kafka-prod-cons
+spec:
+  ports:
+    # The port that this service should serve on.
+    - port: 8096
+      targetPort: 8096
+  # Label keys and values that must match in order to receive traffic for this service.
+  selector:
+    app: my-kafka-cons
+  type: NodePort

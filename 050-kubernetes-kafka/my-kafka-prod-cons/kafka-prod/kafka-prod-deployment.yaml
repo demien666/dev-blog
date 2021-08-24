@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-kafka-prod
+  labels:
+    app: my-kafka-prod
+  namespace: my-kafka-prod-cons 
+spec:
+  selector:
+    matchLabels:
+      octopusexport: OctopusExport
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: my-kafka-prod
+        octopusexport: OctopusExport
+    spec:
+      containers:
+        - name: node-app-runner
+          image: 'lucasjellema/node-app-runner'
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: GIT_URL
+            value: "https://github.com/lucasjellema/2019-fontys-business-and-IT-agility-through-microservice-architecture"
+          - name: APP_PORT
+            value: "8096"
+          - name: APP_HOME
+            value: "4-kafka/event-bus-publisher"
+          - name: APP_STARTUP
+            value: "EventBusPublisher.js"
+          # assuming Kafka was started on minikube using https://github.com/d1egoaz/minikube-kafka-cluster
+          # the Zookeeper cluster is exposed through the service known as zookeeper-service.kafka-ca1 within the Minikube cluster
+          - name: KAFKA_HOST
+            value: "kafka.kafka-ca1"
+          - name: ZOOKEEPER_PORT
+            value: "9092"
+          - name: KAFKA_TOPIC
+            value: "event-bus"      
+          ports:
+          # containerPort is the port exposed by the container (where nodejs express api is listening)
+          - containerPort: 8096              
+
+    

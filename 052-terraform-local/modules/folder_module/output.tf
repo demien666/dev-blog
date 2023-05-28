@@ -1,3 +1,3 @@
-output "folder_name" {
-    value = "${var.folder_name}"
+output "created_folder_name" {
+    value = "${local.folder_name_with_time}"
 }

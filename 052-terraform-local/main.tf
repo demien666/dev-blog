@@ -14,7 +14,7 @@ module "test_file1"  {
     depends_on = [module.test_folder1]
     source = "./modules/file_module"
 
-    folder_name = module.test_folder1.folder_name
+    folder_name = module.test_folder1.created_folder_name
     file_name = "${var.file_1}"
     file_content = "${var.file_1_content}"
 }

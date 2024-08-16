@@ -1,0 +1,17 @@
+KEY_RECORD_ID = "WARC-Record-ID"
+KEY_FETCHET_AT = "WARC-Date:"
+KEY_DOMAIN = "WARC-Target-URI:"
+KEY_HTTP_CODE = "HTTP/1.1"
+KEY_USER_AGENT = "User-agent:"
+KEY_DISALLOW = "Disallow:"
+KEY_ALLOW = "Allow:"
+
+key_fields = [
+    KEY_RECORD_ID,
+    KEY_FETCHET_AT,
+    KEY_DOMAIN,
+    KEY_HTTP_CODE,
+    KEY_USER_AGENT,
+    KEY_DISALLOW,
+    KEY_ALLOW
+]
